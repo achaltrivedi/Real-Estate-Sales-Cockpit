@@ -1,0 +1,2987 @@
+{
+  "project": {
+    "id": "prj_azure_crest",
+    "name": "Azure Crest Residences",
+    "nameAr": "مساكن أزور كرست",
+    "developer": "Genesis Sample Developments (fictional)",
+    "location": "Sample Waterfront District, Dubai",
+    "handoverDate": "2029-06",
+    "currency": "AED",
+    "sample": true,
+    "disclaimer": "SAMPLE DATA. Fictional project for demonstration only. Not an offer; no real units, prices or permits.",
+    "buildings": [
+      {
+        "id": "T1",
+        "name": "Tower 1 — Crest",
+        "floors": 24
+      },
+      {
+        "id": "T2",
+        "name": "Tower 2 — Shore",
+        "floors": 18
+      }
+    ],
+    "modelUrl": "/models/azure-crest.glb"
+  },
+  "paymentPlans": [
+    {
+      "id": "pp_60_40",
+      "projectId": "prj_azure_crest",
+      "name": "60/40 Construction-linked",
+      "nameAr": "٦٠/٤٠ مرتبطة بالإنشاء",
+      "dldFeePercent": 4,
+      "milestones": [
+        {
+          "label": "Booking",
+          "labelAr": "الحجز",
+          "percent": 10,
+          "trigger": "on_booking",
+          "monthOffset": 0
+        },
+        {
+          "label": "Construction instalment 1",
+          "labelAr": "دفعة إنشاء 1",
+          "percent": 10,
+          "trigger": "construction",
+          "monthOffset": 6
+        },
+        {
+          "label": "Construction instalment 2",
+          "labelAr": "دفعة إنشاء 2",
+          "percent": 10,
+          "trigger": "construction",
+          "monthOffset": 12
+        },
+        {
+          "label": "Construction instalment 3",
+          "labelAr": "دفعة إنشاء 3",
+          "percent": 10,
+          "trigger": "construction",
+          "monthOffset": 18
+        },
+        {
+          "label": "Construction instalment 4",
+          "labelAr": "دفعة إنشاء 4",
+          "percent": 10,
+          "trigger": "construction",
+          "monthOffset": 24
+        },
+        {
+          "label": "Construction instalment 5",
+          "labelAr": "دفعة إنشاء 5",
+          "percent": 10,
+          "trigger": "construction",
+          "monthOffset": 30
+        },
+        {
+          "label": "Handover",
+          "labelAr": "التسليم",
+          "percent": 40,
+          "trigger": "on_handover",
+          "monthOffset": 36
+        }
+      ]
+    },
+    {
+      "id": "pp_post_handover",
+      "projectId": "prj_azure_crest",
+      "name": "50/50 with 2-year post-handover",
+      "nameAr": "٥٠/٥٠ مع سنتين بعد التسليم",
+      "dldFeePercent": 4,
+      "milestones": [
+        {
+          "label": "Booking",
+          "labelAr": "الحجز",
+          "percent": 20,
+          "trigger": "on_booking",
+          "monthOffset": 0
+        },
+        {
+          "label": "Construction 50%",
+          "labelAr": "إنجاز ٥٠٪",
+          "percent": 15,
+          "trigger": "construction",
+          "monthOffset": 18
+        },
+        {
+          "label": "Handover",
+          "labelAr": "التسليم",
+          "percent": 15,
+          "trigger": "on_handover",
+          "monthOffset": 36
+        },
+        {
+          "label": "Post-handover 1",
+          "labelAr": "بعد التسليم 1",
+          "percent": 12.5,
+          "trigger": "post_handover",
+          "monthOffset": 42
+        },
+        {
+          "label": "Post-handover 2",
+          "labelAr": "بعد التسليم 2",
+          "percent": 12.5,
+          "trigger": "post_handover",
+          "monthOffset": 48
+        },
+        {
+          "label": "Post-handover 3",
+          "labelAr": "بعد التسليم 3",
+          "percent": 12.5,
+          "trigger": "post_handover",
+          "monthOffset": 54
+        },
+        {
+          "label": "Post-handover 4",
+          "labelAr": "بعد التسليم 4",
+          "percent": 12.5,
+          "trigger": "post_handover",
+          "monthOffset": 60
+        }
+      ]
+    }
+  ],
+  "units": [
+    {
+      "id": "unit_t1_0301",
+      "projectId": "prj_azure_crest",
+      "code": "T1-0301",
+      "building": "T1",
+      "floor": 3,
+      "type": "1br",
+      "view": "sea",
+      "areaSqft": 820,
+      "bedrooms": 1,
+      "bathrooms": 2,
+      "priceAed": 2057000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T1_F3_U01"
+    },
+    {
+      "id": "unit_t1_0302",
+      "projectId": "prj_azure_crest",
+      "code": "T1-0302",
+      "building": "T1",
+      "floor": 3,
+      "type": "2br",
+      "view": "sea",
+      "areaSqft": 1240,
+      "bedrooms": 2,
+      "bathrooms": 3,
+      "priceAed": 3111000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T1_F3_U02"
+    },
+    {
+      "id": "unit_t1_0303",
+      "projectId": "prj_azure_crest",
+      "code": "T1-0303",
+      "building": "T1",
+      "floor": 3,
+      "type": "studio",
+      "view": "city",
+      "areaSqft": 460,
+      "bedrooms": 0,
+      "bathrooms": 1,
+      "priceAed": 966000,
+      "availability": "reserved",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T1_F3_U03"
+    },
+    {
+      "id": "unit_t1_0304",
+      "projectId": "prj_azure_crest",
+      "code": "T1-0304",
+      "building": "T1",
+      "floor": 3,
+      "type": "3br",
+      "view": "marina",
+      "areaSqft": 1780,
+      "bedrooms": 3,
+      "bathrooms": 4,
+      "priceAed": 4283000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T1_F3_U04"
+    },
+    {
+      "id": "unit_t1_0401",
+      "projectId": "prj_azure_crest",
+      "code": "T1-0401",
+      "building": "T1",
+      "floor": 4,
+      "type": "1br",
+      "view": "sea",
+      "areaSqft": 820,
+      "bedrooms": 1,
+      "bathrooms": 2,
+      "priceAed": 2073000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T1_F4_U01"
+    },
+    {
+      "id": "unit_t1_0402",
+      "projectId": "prj_azure_crest",
+      "code": "T1-0402",
+      "building": "T1",
+      "floor": 4,
+      "type": "2br",
+      "view": "sea",
+      "areaSqft": 1240,
+      "bedrooms": 2,
+      "bathrooms": 3,
+      "priceAed": 3135000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T1_F4_U02"
+    },
+    {
+      "id": "unit_t1_0403",
+      "projectId": "prj_azure_crest",
+      "code": "T1-0403",
+      "building": "T1",
+      "floor": 4,
+      "type": "studio",
+      "view": "city",
+      "areaSqft": 460,
+      "bedrooms": 0,
+      "bathrooms": 1,
+      "priceAed": 973000,
+      "availability": "hold",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T1_F4_U03"
+    },
+    {
+      "id": "unit_t1_0404",
+      "projectId": "prj_azure_crest",
+      "code": "T1-0404",
+      "building": "T1",
+      "floor": 4,
+      "type": "3br",
+      "view": "marina",
+      "areaSqft": 1780,
+      "bedrooms": 3,
+      "bathrooms": 4,
+      "priceAed": 4317000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T1_F4_U04"
+    },
+    {
+      "id": "unit_t1_0501",
+      "projectId": "prj_azure_crest",
+      "code": "T1-0501",
+      "building": "T1",
+      "floor": 5,
+      "type": "1br",
+      "view": "sea",
+      "areaSqft": 820,
+      "bedrooms": 1,
+      "bathrooms": 2,
+      "priceAed": 2089000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T1_F5_U01"
+    },
+    {
+      "id": "unit_t1_0502",
+      "projectId": "prj_azure_crest",
+      "code": "T1-0502",
+      "building": "T1",
+      "floor": 5,
+      "type": "2br",
+      "view": "sea",
+      "areaSqft": 1240,
+      "bedrooms": 2,
+      "bathrooms": 3,
+      "priceAed": 3160000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T1_F5_U02"
+    },
+    {
+      "id": "unit_t1_0503",
+      "projectId": "prj_azure_crest",
+      "code": "T1-0503",
+      "building": "T1",
+      "floor": 5,
+      "type": "studio",
+      "view": "city",
+      "areaSqft": 460,
+      "bedrooms": 0,
+      "bathrooms": 1,
+      "priceAed": 981000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T1_F5_U03"
+    },
+    {
+      "id": "unit_t1_0504",
+      "projectId": "prj_azure_crest",
+      "code": "T1-0504",
+      "building": "T1",
+      "floor": 5,
+      "type": "3br",
+      "view": "marina",
+      "areaSqft": 1780,
+      "bedrooms": 3,
+      "bathrooms": 4,
+      "priceAed": 4350000,
+      "availability": "sold",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T1_F5_U04"
+    },
+    {
+      "id": "unit_t1_0601",
+      "projectId": "prj_azure_crest",
+      "code": "T1-0601",
+      "building": "T1",
+      "floor": 6,
+      "type": "1br",
+      "view": "sea",
+      "areaSqft": 820,
+      "bedrooms": 1,
+      "bathrooms": 2,
+      "priceAed": 2105000,
+      "availability": "sold",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T1_F6_U01"
+    },
+    {
+      "id": "unit_t1_0602",
+      "projectId": "prj_azure_crest",
+      "code": "T1-0602",
+      "building": "T1",
+      "floor": 6,
+      "type": "2br",
+      "view": "sea",
+      "areaSqft": 1240,
+      "bedrooms": 2,
+      "bathrooms": 3,
+      "priceAed": 3184000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T1_F6_U02"
+    },
+    {
+      "id": "unit_t1_0603",
+      "projectId": "prj_azure_crest",
+      "code": "T1-0603",
+      "building": "T1",
+      "floor": 6,
+      "type": "studio",
+      "view": "city",
+      "areaSqft": 460,
+      "bedrooms": 0,
+      "bathrooms": 1,
+      "priceAed": 988000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T1_F6_U03"
+    },
+    {
+      "id": "unit_t1_0604",
+      "projectId": "prj_azure_crest",
+      "code": "T1-0604",
+      "building": "T1",
+      "floor": 6,
+      "type": "3br",
+      "view": "marina",
+      "areaSqft": 1780,
+      "bedrooms": 3,
+      "bathrooms": 4,
+      "priceAed": 4384000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T1_F6_U04"
+    },
+    {
+      "id": "unit_t1_0701",
+      "projectId": "prj_azure_crest",
+      "code": "T1-0701",
+      "building": "T1",
+      "floor": 7,
+      "type": "1br",
+      "view": "sea",
+      "areaSqft": 820,
+      "bedrooms": 1,
+      "bathrooms": 2,
+      "priceAed": 2122000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T1_F7_U01"
+    },
+    {
+      "id": "unit_t1_0702",
+      "projectId": "prj_azure_crest",
+      "code": "T1-0702",
+      "building": "T1",
+      "floor": 7,
+      "type": "2br",
+      "view": "sea",
+      "areaSqft": 1240,
+      "bedrooms": 2,
+      "bathrooms": 3,
+      "priceAed": 3208000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T1_F7_U02"
+    },
+    {
+      "id": "unit_t1_0703",
+      "projectId": "prj_azure_crest",
+      "code": "T1-0703",
+      "building": "T1",
+      "floor": 7,
+      "type": "studio",
+      "view": "city",
+      "areaSqft": 460,
+      "bedrooms": 0,
+      "bathrooms": 1,
+      "priceAed": 996000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T1_F7_U03"
+    },
+    {
+      "id": "unit_t1_0704",
+      "projectId": "prj_azure_crest",
+      "code": "T1-0704",
+      "building": "T1",
+      "floor": 7,
+      "type": "3br",
+      "view": "marina",
+      "areaSqft": 1780,
+      "bedrooms": 3,
+      "bathrooms": 4,
+      "priceAed": 4417000,
+      "availability": "sold",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T1_F7_U04"
+    },
+    {
+      "id": "unit_t1_0801",
+      "projectId": "prj_azure_crest",
+      "code": "T1-0801",
+      "building": "T1",
+      "floor": 8,
+      "type": "1br",
+      "view": "sea",
+      "areaSqft": 820,
+      "bedrooms": 1,
+      "bathrooms": 2,
+      "priceAed": 2138000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T1_F8_U01"
+    },
+    {
+      "id": "unit_t1_0802",
+      "projectId": "prj_azure_crest",
+      "code": "T1-0802",
+      "building": "T1",
+      "floor": 8,
+      "type": "2br",
+      "view": "sea",
+      "areaSqft": 1240,
+      "bedrooms": 2,
+      "bathrooms": 3,
+      "priceAed": 3232000,
+      "availability": "sold",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T1_F8_U02"
+    },
+    {
+      "id": "unit_t1_0803",
+      "projectId": "prj_azure_crest",
+      "code": "T1-0803",
+      "building": "T1",
+      "floor": 8,
+      "type": "studio",
+      "view": "city",
+      "areaSqft": 460,
+      "bedrooms": 0,
+      "bathrooms": 1,
+      "priceAed": 1003000,
+      "availability": "reserved",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T1_F8_U03"
+    },
+    {
+      "id": "unit_t1_0804",
+      "projectId": "prj_azure_crest",
+      "code": "T1-0804",
+      "building": "T1",
+      "floor": 8,
+      "type": "3br",
+      "view": "marina",
+      "areaSqft": 1780,
+      "bedrooms": 3,
+      "bathrooms": 4,
+      "priceAed": 4451000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T1_F8_U04"
+    },
+    {
+      "id": "unit_t1_0901",
+      "projectId": "prj_azure_crest",
+      "code": "T1-0901",
+      "building": "T1",
+      "floor": 9,
+      "type": "1br",
+      "view": "sea",
+      "areaSqft": 820,
+      "bedrooms": 1,
+      "bathrooms": 2,
+      "priceAed": 2154000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T1_F9_U01"
+    },
+    {
+      "id": "unit_t1_0902",
+      "projectId": "prj_azure_crest",
+      "code": "T1-0902",
+      "building": "T1",
+      "floor": 9,
+      "type": "2br",
+      "view": "sea",
+      "areaSqft": 1240,
+      "bedrooms": 2,
+      "bathrooms": 3,
+      "priceAed": 3257000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T1_F9_U02"
+    },
+    {
+      "id": "unit_t1_0903",
+      "projectId": "prj_azure_crest",
+      "code": "T1-0903",
+      "building": "T1",
+      "floor": 9,
+      "type": "studio",
+      "view": "city",
+      "areaSqft": 460,
+      "bedrooms": 0,
+      "bathrooms": 1,
+      "priceAed": 1011000,
+      "availability": "sold",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T1_F9_U03"
+    },
+    {
+      "id": "unit_t1_0904",
+      "projectId": "prj_azure_crest",
+      "code": "T1-0904",
+      "building": "T1",
+      "floor": 9,
+      "type": "3br",
+      "view": "marina",
+      "areaSqft": 1780,
+      "bedrooms": 3,
+      "bathrooms": 4,
+      "priceAed": 4484000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T1_F9_U04"
+    },
+    {
+      "id": "unit_t1_1001",
+      "projectId": "prj_azure_crest",
+      "code": "T1-1001",
+      "building": "T1",
+      "floor": 10,
+      "type": "1br",
+      "view": "sea",
+      "areaSqft": 820,
+      "bedrooms": 1,
+      "bathrooms": 2,
+      "priceAed": 2170000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T1_F10_U01"
+    },
+    {
+      "id": "unit_t1_1002",
+      "projectId": "prj_azure_crest",
+      "code": "T1-1002",
+      "building": "T1",
+      "floor": 10,
+      "type": "2br",
+      "view": "sea",
+      "areaSqft": 1240,
+      "bedrooms": 2,
+      "bathrooms": 3,
+      "priceAed": 3281000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T1_F10_U02"
+    },
+    {
+      "id": "unit_t1_1003",
+      "projectId": "prj_azure_crest",
+      "code": "T1-1003",
+      "building": "T1",
+      "floor": 10,
+      "type": "studio",
+      "view": "city",
+      "areaSqft": 460,
+      "bedrooms": 0,
+      "bathrooms": 1,
+      "priceAed": 1018000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T1_F10_U03"
+    },
+    {
+      "id": "unit_t1_1004",
+      "projectId": "prj_azure_crest",
+      "code": "T1-1004",
+      "building": "T1",
+      "floor": 10,
+      "type": "3br",
+      "view": "marina",
+      "areaSqft": 1780,
+      "bedrooms": 3,
+      "bathrooms": 4,
+      "priceAed": 4518000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T1_F10_U04"
+    },
+    {
+      "id": "unit_t1_1101",
+      "projectId": "prj_azure_crest",
+      "code": "T1-1101",
+      "building": "T1",
+      "floor": 11,
+      "type": "1br",
+      "view": "sea",
+      "areaSqft": 820,
+      "bedrooms": 1,
+      "bathrooms": 2,
+      "priceAed": 2186000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T1_F11_U01"
+    },
+    {
+      "id": "unit_t1_1102",
+      "projectId": "prj_azure_crest",
+      "code": "T1-1102",
+      "building": "T1",
+      "floor": 11,
+      "type": "2br",
+      "view": "sea",
+      "areaSqft": 1240,
+      "bedrooms": 2,
+      "bathrooms": 3,
+      "priceAed": 3305000,
+      "availability": "hold",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T1_F11_U02"
+    },
+    {
+      "id": "unit_t1_1103",
+      "projectId": "prj_azure_crest",
+      "code": "T1-1103",
+      "building": "T1",
+      "floor": 11,
+      "type": "studio",
+      "view": "city",
+      "areaSqft": 460,
+      "bedrooms": 0,
+      "bathrooms": 1,
+      "priceAed": 1026000,
+      "availability": "sold",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T1_F11_U03"
+    },
+    {
+      "id": "unit_t1_1104",
+      "projectId": "prj_azure_crest",
+      "code": "T1-1104",
+      "building": "T1",
+      "floor": 11,
+      "type": "3br",
+      "view": "marina",
+      "areaSqft": 1780,
+      "bedrooms": 3,
+      "bathrooms": 4,
+      "priceAed": 4551000,
+      "availability": "sold",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T1_F11_U04"
+    },
+    {
+      "id": "unit_t1_1201",
+      "projectId": "prj_azure_crest",
+      "code": "T1-1201",
+      "building": "T1",
+      "floor": 12,
+      "type": "1br",
+      "view": "sea",
+      "areaSqft": 820,
+      "bedrooms": 1,
+      "bathrooms": 2,
+      "priceAed": 2202000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T1_F12_U01"
+    },
+    {
+      "id": "unit_t1_1202",
+      "projectId": "prj_azure_crest",
+      "code": "T1-1202",
+      "building": "T1",
+      "floor": 12,
+      "type": "2br",
+      "view": "sea",
+      "areaSqft": 1240,
+      "bedrooms": 2,
+      "bathrooms": 3,
+      "priceAed": 3330000,
+      "availability": "reserved",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T1_F12_U02"
+    },
+    {
+      "id": "unit_t1_1203",
+      "projectId": "prj_azure_crest",
+      "code": "T1-1203",
+      "building": "T1",
+      "floor": 12,
+      "type": "studio",
+      "view": "city",
+      "areaSqft": 460,
+      "bedrooms": 0,
+      "bathrooms": 1,
+      "priceAed": 1034000,
+      "availability": "reserved",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T1_F12_U03"
+    },
+    {
+      "id": "unit_t1_1204",
+      "projectId": "prj_azure_crest",
+      "code": "T1-1204",
+      "building": "T1",
+      "floor": 12,
+      "type": "3br",
+      "view": "marina",
+      "areaSqft": 1780,
+      "bedrooms": 3,
+      "bathrooms": 4,
+      "priceAed": 4585000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T1_F12_U04"
+    },
+    {
+      "id": "unit_t1_1301",
+      "projectId": "prj_azure_crest",
+      "code": "T1-1301",
+      "building": "T1",
+      "floor": 13,
+      "type": "1br",
+      "view": "sea",
+      "areaSqft": 820,
+      "bedrooms": 1,
+      "bathrooms": 2,
+      "priceAed": 2218000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T1_F13_U01"
+    },
+    {
+      "id": "unit_t1_1302",
+      "projectId": "prj_azure_crest",
+      "code": "T1-1302",
+      "building": "T1",
+      "floor": 13,
+      "type": "2br",
+      "view": "sea",
+      "areaSqft": 1240,
+      "bedrooms": 2,
+      "bathrooms": 3,
+      "priceAed": 3354000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T1_F13_U02"
+    },
+    {
+      "id": "unit_t1_1303",
+      "projectId": "prj_azure_crest",
+      "code": "T1-1303",
+      "building": "T1",
+      "floor": 13,
+      "type": "studio",
+      "view": "city",
+      "areaSqft": 460,
+      "bedrooms": 0,
+      "bathrooms": 1,
+      "priceAed": 1041000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T1_F13_U03"
+    },
+    {
+      "id": "unit_t1_1304",
+      "projectId": "prj_azure_crest",
+      "code": "T1-1304",
+      "building": "T1",
+      "floor": 13,
+      "type": "3br",
+      "view": "marina",
+      "areaSqft": 1780,
+      "bedrooms": 3,
+      "bathrooms": 4,
+      "priceAed": 4618000,
+      "availability": "reserved",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T1_F13_U04"
+    },
+    {
+      "id": "unit_t1_1401",
+      "projectId": "prj_azure_crest",
+      "code": "T1-1401",
+      "building": "T1",
+      "floor": 14,
+      "type": "1br",
+      "view": "sea",
+      "areaSqft": 820,
+      "bedrooms": 1,
+      "bathrooms": 2,
+      "priceAed": 2234000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T1_F14_U01"
+    },
+    {
+      "id": "unit_t1_1402",
+      "projectId": "prj_azure_crest",
+      "code": "T1-1402",
+      "building": "T1",
+      "floor": 14,
+      "type": "2br",
+      "view": "sea",
+      "areaSqft": 1240,
+      "bedrooms": 2,
+      "bathrooms": 3,
+      "priceAed": 3378000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T1_F14_U02"
+    },
+    {
+      "id": "unit_t1_1403",
+      "projectId": "prj_azure_crest",
+      "code": "T1-1403",
+      "building": "T1",
+      "floor": 14,
+      "type": "studio",
+      "view": "city",
+      "areaSqft": 460,
+      "bedrooms": 0,
+      "bathrooms": 1,
+      "priceAed": 1049000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T1_F14_U03"
+    },
+    {
+      "id": "unit_t1_1404",
+      "projectId": "prj_azure_crest",
+      "code": "T1-1404",
+      "building": "T1",
+      "floor": 14,
+      "type": "3br",
+      "view": "marina",
+      "areaSqft": 1780,
+      "bedrooms": 3,
+      "bathrooms": 4,
+      "priceAed": 4651000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T1_F14_U04"
+    },
+    {
+      "id": "unit_t1_1501",
+      "projectId": "prj_azure_crest",
+      "code": "T1-1501",
+      "building": "T1",
+      "floor": 15,
+      "type": "1br",
+      "view": "sea",
+      "areaSqft": 820,
+      "bedrooms": 1,
+      "bathrooms": 2,
+      "priceAed": 2250000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T1_F15_U01"
+    },
+    {
+      "id": "unit_t1_1502",
+      "projectId": "prj_azure_crest",
+      "code": "T1-1502",
+      "building": "T1",
+      "floor": 15,
+      "type": "2br",
+      "view": "sea",
+      "areaSqft": 1240,
+      "bedrooms": 2,
+      "bathrooms": 3,
+      "priceAed": 3403000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T1_F15_U02"
+    },
+    {
+      "id": "unit_t1_1503",
+      "projectId": "prj_azure_crest",
+      "code": "T1-1503",
+      "building": "T1",
+      "floor": 15,
+      "type": "studio",
+      "view": "city",
+      "areaSqft": 460,
+      "bedrooms": 0,
+      "bathrooms": 1,
+      "priceAed": 1056000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T1_F15_U03"
+    },
+    {
+      "id": "unit_t1_1504",
+      "projectId": "prj_azure_crest",
+      "code": "T1-1504",
+      "building": "T1",
+      "floor": 15,
+      "type": "3br",
+      "view": "marina",
+      "areaSqft": 1780,
+      "bedrooms": 3,
+      "bathrooms": 4,
+      "priceAed": 4685000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T1_F15_U04"
+    },
+    {
+      "id": "unit_t1_1601",
+      "projectId": "prj_azure_crest",
+      "code": "T1-1601",
+      "building": "T1",
+      "floor": 16,
+      "type": "1br",
+      "view": "sea",
+      "areaSqft": 820,
+      "bedrooms": 1,
+      "bathrooms": 2,
+      "priceAed": 2266000,
+      "availability": "hold",
+      "paymentPlanIds": [
+        "pp_60_40",
+        "pp_post_handover"
+      ],
+      "meshId": "T1_F16_U01"
+    },
+    {
+      "id": "unit_t1_1602",
+      "projectId": "prj_azure_crest",
+      "code": "T1-1602",
+      "building": "T1",
+      "floor": 16,
+      "type": "2br",
+      "view": "sea",
+      "areaSqft": 1240,
+      "bedrooms": 2,
+      "bathrooms": 3,
+      "priceAed": 3427000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40",
+        "pp_post_handover"
+      ],
+      "meshId": "T1_F16_U02"
+    },
+    {
+      "id": "unit_t1_1603",
+      "projectId": "prj_azure_crest",
+      "code": "T1-1603",
+      "building": "T1",
+      "floor": 16,
+      "type": "studio",
+      "view": "city",
+      "areaSqft": 460,
+      "bedrooms": 0,
+      "bathrooms": 1,
+      "priceAed": 1064000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40",
+        "pp_post_handover"
+      ],
+      "meshId": "T1_F16_U03"
+    },
+    {
+      "id": "unit_t1_1604",
+      "projectId": "prj_azure_crest",
+      "code": "T1-1604",
+      "building": "T1",
+      "floor": 16,
+      "type": "3br",
+      "view": "marina",
+      "areaSqft": 1780,
+      "bedrooms": 3,
+      "bathrooms": 4,
+      "priceAed": 4718000,
+      "availability": "hold",
+      "paymentPlanIds": [
+        "pp_60_40",
+        "pp_post_handover"
+      ],
+      "meshId": "T1_F16_U04"
+    },
+    {
+      "id": "unit_t1_1701",
+      "projectId": "prj_azure_crest",
+      "code": "T1-1701",
+      "building": "T1",
+      "floor": 17,
+      "type": "1br",
+      "view": "sea",
+      "areaSqft": 820,
+      "bedrooms": 1,
+      "bathrooms": 2,
+      "priceAed": 2282000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40",
+        "pp_post_handover"
+      ],
+      "meshId": "T1_F17_U01"
+    },
+    {
+      "id": "unit_t1_1702",
+      "projectId": "prj_azure_crest",
+      "code": "T1-1702",
+      "building": "T1",
+      "floor": 17,
+      "type": "2br",
+      "view": "sea",
+      "areaSqft": 1240,
+      "bedrooms": 2,
+      "bathrooms": 3,
+      "priceAed": 3451000,
+      "availability": "reserved",
+      "paymentPlanIds": [
+        "pp_60_40",
+        "pp_post_handover"
+      ],
+      "meshId": "T1_F17_U02"
+    },
+    {
+      "id": "unit_t1_1703",
+      "projectId": "prj_azure_crest",
+      "code": "T1-1703",
+      "building": "T1",
+      "floor": 17,
+      "type": "studio",
+      "view": "city",
+      "areaSqft": 460,
+      "bedrooms": 0,
+      "bathrooms": 1,
+      "priceAed": 1071000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40",
+        "pp_post_handover"
+      ],
+      "meshId": "T1_F17_U03"
+    },
+    {
+      "id": "unit_t1_1704",
+      "projectId": "prj_azure_crest",
+      "code": "T1-1704",
+      "building": "T1",
+      "floor": 17,
+      "type": "3br",
+      "view": "marina",
+      "areaSqft": 1780,
+      "bedrooms": 3,
+      "bathrooms": 4,
+      "priceAed": 4752000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40",
+        "pp_post_handover"
+      ],
+      "meshId": "T1_F17_U04"
+    },
+    {
+      "id": "unit_t1_1801",
+      "projectId": "prj_azure_crest",
+      "code": "T1-1801",
+      "building": "T1",
+      "floor": 18,
+      "type": "1br",
+      "view": "sea",
+      "areaSqft": 820,
+      "bedrooms": 1,
+      "bathrooms": 2,
+      "priceAed": 2298000,
+      "availability": "hold",
+      "paymentPlanIds": [
+        "pp_60_40",
+        "pp_post_handover"
+      ],
+      "meshId": "T1_F18_U01"
+    },
+    {
+      "id": "unit_t1_1802",
+      "projectId": "prj_azure_crest",
+      "code": "T1-1802",
+      "building": "T1",
+      "floor": 18,
+      "type": "2br",
+      "view": "sea",
+      "areaSqft": 1240,
+      "bedrooms": 2,
+      "bathrooms": 3,
+      "priceAed": 3475000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40",
+        "pp_post_handover"
+      ],
+      "meshId": "T1_F18_U02"
+    },
+    {
+      "id": "unit_t1_1803",
+      "projectId": "prj_azure_crest",
+      "code": "T1-1803",
+      "building": "T1",
+      "floor": 18,
+      "type": "studio",
+      "view": "city",
+      "areaSqft": 460,
+      "bedrooms": 0,
+      "bathrooms": 1,
+      "priceAed": 1079000,
+      "availability": "reserved",
+      "paymentPlanIds": [
+        "pp_60_40",
+        "pp_post_handover"
+      ],
+      "meshId": "T1_F18_U03"
+    },
+    {
+      "id": "unit_t1_1804",
+      "projectId": "prj_azure_crest",
+      "code": "T1-1804",
+      "building": "T1",
+      "floor": 18,
+      "type": "3br",
+      "view": "marina",
+      "areaSqft": 1780,
+      "bedrooms": 3,
+      "bathrooms": 4,
+      "priceAed": 4785000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40",
+        "pp_post_handover"
+      ],
+      "meshId": "T1_F18_U04"
+    },
+    {
+      "id": "unit_t1_1901",
+      "projectId": "prj_azure_crest",
+      "code": "T1-1901",
+      "building": "T1",
+      "floor": 19,
+      "type": "1br",
+      "view": "sea",
+      "areaSqft": 820,
+      "bedrooms": 1,
+      "bathrooms": 2,
+      "priceAed": 2314000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40",
+        "pp_post_handover"
+      ],
+      "meshId": "T1_F19_U01"
+    },
+    {
+      "id": "unit_t1_1902",
+      "projectId": "prj_azure_crest",
+      "code": "T1-1902",
+      "building": "T1",
+      "floor": 19,
+      "type": "2br",
+      "view": "sea",
+      "areaSqft": 1240,
+      "bedrooms": 2,
+      "bathrooms": 3,
+      "priceAed": 3500000,
+      "availability": "reserved",
+      "paymentPlanIds": [
+        "pp_60_40",
+        "pp_post_handover"
+      ],
+      "meshId": "T1_F19_U02"
+    },
+    {
+      "id": "unit_t1_1903",
+      "projectId": "prj_azure_crest",
+      "code": "T1-1903",
+      "building": "T1",
+      "floor": 19,
+      "type": "studio",
+      "view": "city",
+      "areaSqft": 460,
+      "bedrooms": 0,
+      "bathrooms": 1,
+      "priceAed": 1086000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40",
+        "pp_post_handover"
+      ],
+      "meshId": "T1_F19_U03"
+    },
+    {
+      "id": "unit_t1_1904",
+      "projectId": "prj_azure_crest",
+      "code": "T1-1904",
+      "building": "T1",
+      "floor": 19,
+      "type": "3br",
+      "view": "marina",
+      "areaSqft": 1780,
+      "bedrooms": 3,
+      "bathrooms": 4,
+      "priceAed": 4819000,
+      "availability": "sold",
+      "paymentPlanIds": [
+        "pp_60_40",
+        "pp_post_handover"
+      ],
+      "meshId": "T1_F19_U04"
+    },
+    {
+      "id": "unit_t1_2001",
+      "projectId": "prj_azure_crest",
+      "code": "T1-2001",
+      "building": "T1",
+      "floor": 20,
+      "type": "1br",
+      "view": "sea",
+      "areaSqft": 820,
+      "bedrooms": 1,
+      "bathrooms": 2,
+      "priceAed": 2330000,
+      "availability": "sold",
+      "paymentPlanIds": [
+        "pp_60_40",
+        "pp_post_handover"
+      ],
+      "meshId": "T1_F20_U01"
+    },
+    {
+      "id": "unit_t1_2002",
+      "projectId": "prj_azure_crest",
+      "code": "T1-2002",
+      "building": "T1",
+      "floor": 20,
+      "type": "2br",
+      "view": "sea",
+      "areaSqft": 1240,
+      "bedrooms": 2,
+      "bathrooms": 3,
+      "priceAed": 3524000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40",
+        "pp_post_handover"
+      ],
+      "meshId": "T1_F20_U02"
+    },
+    {
+      "id": "unit_t1_2003",
+      "projectId": "prj_azure_crest",
+      "code": "T1-2003",
+      "building": "T1",
+      "floor": 20,
+      "type": "studio",
+      "view": "city",
+      "areaSqft": 460,
+      "bedrooms": 0,
+      "bathrooms": 1,
+      "priceAed": 1094000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40",
+        "pp_post_handover"
+      ],
+      "meshId": "T1_F20_U03"
+    },
+    {
+      "id": "unit_t1_2004",
+      "projectId": "prj_azure_crest",
+      "code": "T1-2004",
+      "building": "T1",
+      "floor": 20,
+      "type": "3br",
+      "view": "marina",
+      "areaSqft": 1780,
+      "bedrooms": 3,
+      "bathrooms": 4,
+      "priceAed": 4852000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40",
+        "pp_post_handover"
+      ],
+      "meshId": "T1_F20_U04"
+    },
+    {
+      "id": "unit_t1_2101",
+      "projectId": "prj_azure_crest",
+      "code": "T1-2101",
+      "building": "T1",
+      "floor": 21,
+      "type": "1br",
+      "view": "sea",
+      "areaSqft": 820,
+      "bedrooms": 1,
+      "bathrooms": 2,
+      "priceAed": 2347000,
+      "availability": "reserved",
+      "paymentPlanIds": [
+        "pp_60_40",
+        "pp_post_handover"
+      ],
+      "meshId": "T1_F21_U01"
+    },
+    {
+      "id": "unit_t1_2102",
+      "projectId": "prj_azure_crest",
+      "code": "T1-2102",
+      "building": "T1",
+      "floor": 21,
+      "type": "2br",
+      "view": "sea",
+      "areaSqft": 1240,
+      "bedrooms": 2,
+      "bathrooms": 3,
+      "priceAed": 3548000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40",
+        "pp_post_handover"
+      ],
+      "meshId": "T1_F21_U02"
+    },
+    {
+      "id": "unit_t1_2103",
+      "projectId": "prj_azure_crest",
+      "code": "T1-2103",
+      "building": "T1",
+      "floor": 21,
+      "type": "studio",
+      "view": "city",
+      "areaSqft": 460,
+      "bedrooms": 0,
+      "bathrooms": 1,
+      "priceAed": 1101000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40",
+        "pp_post_handover"
+      ],
+      "meshId": "T1_F21_U03"
+    },
+    {
+      "id": "unit_t1_2104",
+      "projectId": "prj_azure_crest",
+      "code": "T1-2104",
+      "building": "T1",
+      "floor": 21,
+      "type": "3br",
+      "view": "marina",
+      "areaSqft": 1780,
+      "bedrooms": 3,
+      "bathrooms": 4,
+      "priceAed": 4886000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40",
+        "pp_post_handover"
+      ],
+      "meshId": "T1_F21_U04"
+    },
+    {
+      "id": "unit_t1_2201",
+      "projectId": "prj_azure_crest",
+      "code": "T1-2201",
+      "building": "T1",
+      "floor": 22,
+      "type": "1br",
+      "view": "sea",
+      "areaSqft": 820,
+      "bedrooms": 1,
+      "bathrooms": 2,
+      "priceAed": 2363000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40",
+        "pp_post_handover"
+      ],
+      "meshId": "T1_F22_U01"
+    },
+    {
+      "id": "unit_t1_2202",
+      "projectId": "prj_azure_crest",
+      "code": "T1-2202",
+      "building": "T1",
+      "floor": 22,
+      "type": "2br",
+      "view": "sea",
+      "areaSqft": 1240,
+      "bedrooms": 2,
+      "bathrooms": 3,
+      "priceAed": 3573000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40",
+        "pp_post_handover"
+      ],
+      "meshId": "T1_F22_U02"
+    },
+    {
+      "id": "unit_t1_2203",
+      "projectId": "prj_azure_crest",
+      "code": "T1-2203",
+      "building": "T1",
+      "floor": 22,
+      "type": "studio",
+      "view": "city",
+      "areaSqft": 460,
+      "bedrooms": 0,
+      "bathrooms": 1,
+      "priceAed": 1109000,
+      "availability": "hold",
+      "paymentPlanIds": [
+        "pp_60_40",
+        "pp_post_handover"
+      ],
+      "meshId": "T1_F22_U03"
+    },
+    {
+      "id": "unit_t1_2204",
+      "projectId": "prj_azure_crest",
+      "code": "T1-2204",
+      "building": "T1",
+      "floor": 22,
+      "type": "3br",
+      "view": "marina",
+      "areaSqft": 1780,
+      "bedrooms": 3,
+      "bathrooms": 4,
+      "priceAed": 4919000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40",
+        "pp_post_handover"
+      ],
+      "meshId": "T1_F22_U04"
+    },
+    {
+      "id": "unit_t1_2301",
+      "projectId": "prj_azure_crest",
+      "code": "T1-2301",
+      "building": "T1",
+      "floor": 23,
+      "type": "1br",
+      "view": "sea",
+      "areaSqft": 820,
+      "bedrooms": 1,
+      "bathrooms": 2,
+      "priceAed": 2379000,
+      "availability": "reserved",
+      "paymentPlanIds": [
+        "pp_60_40",
+        "pp_post_handover"
+      ],
+      "meshId": "T1_F23_U01"
+    },
+    {
+      "id": "unit_t1_2302",
+      "projectId": "prj_azure_crest",
+      "code": "T1-2302",
+      "building": "T1",
+      "floor": 23,
+      "type": "2br",
+      "view": "sea",
+      "areaSqft": 1240,
+      "bedrooms": 2,
+      "bathrooms": 3,
+      "priceAed": 3597000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40",
+        "pp_post_handover"
+      ],
+      "meshId": "T1_F23_U02"
+    },
+    {
+      "id": "unit_t1_2303",
+      "projectId": "prj_azure_crest",
+      "code": "T1-2303",
+      "building": "T1",
+      "floor": 23,
+      "type": "studio",
+      "view": "city",
+      "areaSqft": 460,
+      "bedrooms": 0,
+      "bathrooms": 1,
+      "priceAed": 1117000,
+      "availability": "reserved",
+      "paymentPlanIds": [
+        "pp_60_40",
+        "pp_post_handover"
+      ],
+      "meshId": "T1_F23_U03"
+    },
+    {
+      "id": "unit_t1_2304",
+      "projectId": "prj_azure_crest",
+      "code": "T1-2304",
+      "building": "T1",
+      "floor": 23,
+      "type": "3br",
+      "view": "marina",
+      "areaSqft": 1780,
+      "bedrooms": 3,
+      "bathrooms": 4,
+      "priceAed": 4953000,
+      "availability": "sold",
+      "paymentPlanIds": [
+        "pp_60_40",
+        "pp_post_handover"
+      ],
+      "meshId": "T1_F23_U04"
+    },
+    {
+      "id": "unit_t1_2401",
+      "projectId": "prj_azure_crest",
+      "code": "T1-2401",
+      "building": "T1",
+      "floor": 24,
+      "type": "1br",
+      "view": "sea",
+      "areaSqft": 820,
+      "bedrooms": 1,
+      "bathrooms": 2,
+      "priceAed": 2395000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40",
+        "pp_post_handover"
+      ],
+      "meshId": "T1_F24_U01"
+    },
+    {
+      "id": "unit_t1_2402",
+      "projectId": "prj_azure_crest",
+      "code": "T1-2402",
+      "building": "T1",
+      "floor": 24,
+      "type": "2br",
+      "view": "sea",
+      "areaSqft": 1240,
+      "bedrooms": 2,
+      "bathrooms": 3,
+      "priceAed": 3621000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40",
+        "pp_post_handover"
+      ],
+      "meshId": "T1_F24_U02"
+    },
+    {
+      "id": "unit_t1_2403",
+      "projectId": "prj_azure_crest",
+      "code": "T1-2403",
+      "building": "T1",
+      "floor": 24,
+      "type": "studio",
+      "view": "city",
+      "areaSqft": 460,
+      "bedrooms": 0,
+      "bathrooms": 1,
+      "priceAed": 1124000,
+      "availability": "sold",
+      "paymentPlanIds": [
+        "pp_60_40",
+        "pp_post_handover"
+      ],
+      "meshId": "T1_F24_U03"
+    },
+    {
+      "id": "unit_t1_2404",
+      "projectId": "prj_azure_crest",
+      "code": "T1-2404",
+      "building": "T1",
+      "floor": 24,
+      "type": "penthouse",
+      "view": "marina",
+      "areaSqft": 3200,
+      "bedrooms": 4,
+      "bathrooms": 5,
+      "priceAed": 8964000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40",
+        "pp_post_handover"
+      ],
+      "meshId": "T1_F24_U04"
+    },
+    {
+      "id": "unit_t2_0301",
+      "projectId": "prj_azure_crest",
+      "code": "T2-0301",
+      "building": "T2",
+      "floor": 3,
+      "type": "1br",
+      "view": "park",
+      "areaSqft": 760,
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "priceAed": 1673000,
+      "availability": "hold",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T2_F3_U01"
+    },
+    {
+      "id": "unit_t2_0302",
+      "projectId": "prj_azure_crest",
+      "code": "T2-0302",
+      "building": "T2",
+      "floor": 3,
+      "type": "2br",
+      "view": "pool",
+      "areaSqft": 1150,
+      "bedrooms": 2,
+      "bathrooms": 2,
+      "priceAed": 2473000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T2_F3_U02"
+    },
+    {
+      "id": "unit_t2_0303",
+      "projectId": "prj_azure_crest",
+      "code": "T2-0303",
+      "building": "T2",
+      "floor": 3,
+      "type": "2br",
+      "view": "city",
+      "areaSqft": 1190,
+      "bedrooms": 2,
+      "bathrooms": 3,
+      "priceAed": 2498000,
+      "availability": "sold",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T2_F3_U03"
+    },
+    {
+      "id": "unit_t2_0304",
+      "projectId": "prj_azure_crest",
+      "code": "T2-0304",
+      "building": "T2",
+      "floor": 3,
+      "type": "3br",
+      "view": "park",
+      "areaSqft": 1650,
+      "bedrooms": 3,
+      "bathrooms": 3,
+      "priceAed": 3633000,
+      "availability": "sold",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T2_F3_U04"
+    },
+    {
+      "id": "unit_t2_0401",
+      "projectId": "prj_azure_crest",
+      "code": "T2-0401",
+      "building": "T2",
+      "floor": 4,
+      "type": "1br",
+      "view": "park",
+      "areaSqft": 760,
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "priceAed": 1686000,
+      "availability": "reserved",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T2_F4_U01"
+    },
+    {
+      "id": "unit_t2_0402",
+      "projectId": "prj_azure_crest",
+      "code": "T2-0402",
+      "building": "T2",
+      "floor": 4,
+      "type": "2br",
+      "view": "pool",
+      "areaSqft": 1150,
+      "bedrooms": 2,
+      "bathrooms": 2,
+      "priceAed": 2492000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T2_F4_U02"
+    },
+    {
+      "id": "unit_t2_0403",
+      "projectId": "prj_azure_crest",
+      "code": "T2-0403",
+      "building": "T2",
+      "floor": 4,
+      "type": "2br",
+      "view": "city",
+      "areaSqft": 1190,
+      "bedrooms": 2,
+      "bathrooms": 3,
+      "priceAed": 2518000,
+      "availability": "sold",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T2_F4_U03"
+    },
+    {
+      "id": "unit_t2_0404",
+      "projectId": "prj_azure_crest",
+      "code": "T2-0404",
+      "building": "T2",
+      "floor": 4,
+      "type": "3br",
+      "view": "park",
+      "areaSqft": 1650,
+      "bedrooms": 3,
+      "bathrooms": 3,
+      "priceAed": 3661000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T2_F4_U04"
+    },
+    {
+      "id": "unit_t2_0501",
+      "projectId": "prj_azure_crest",
+      "code": "T2-0501",
+      "building": "T2",
+      "floor": 5,
+      "type": "1br",
+      "view": "park",
+      "areaSqft": 760,
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "priceAed": 1699000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T2_F5_U01"
+    },
+    {
+      "id": "unit_t2_0502",
+      "projectId": "prj_azure_crest",
+      "code": "T2-0502",
+      "building": "T2",
+      "floor": 5,
+      "type": "2br",
+      "view": "pool",
+      "areaSqft": 1150,
+      "bedrooms": 2,
+      "bathrooms": 2,
+      "priceAed": 2512000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T2_F5_U02"
+    },
+    {
+      "id": "unit_t2_0503",
+      "projectId": "prj_azure_crest",
+      "code": "T2-0503",
+      "building": "T2",
+      "floor": 5,
+      "type": "2br",
+      "view": "city",
+      "areaSqft": 1190,
+      "bedrooms": 2,
+      "bathrooms": 3,
+      "priceAed": 2537000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T2_F5_U03"
+    },
+    {
+      "id": "unit_t2_0504",
+      "projectId": "prj_azure_crest",
+      "code": "T2-0504",
+      "building": "T2",
+      "floor": 5,
+      "type": "3br",
+      "view": "park",
+      "areaSqft": 1650,
+      "bedrooms": 3,
+      "bathrooms": 3,
+      "priceAed": 3689000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T2_F5_U04"
+    },
+    {
+      "id": "unit_t2_0601",
+      "projectId": "prj_azure_crest",
+      "code": "T2-0601",
+      "building": "T2",
+      "floor": 6,
+      "type": "1br",
+      "view": "park",
+      "areaSqft": 760,
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "priceAed": 1712000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T2_F6_U01"
+    },
+    {
+      "id": "unit_t2_0602",
+      "projectId": "prj_azure_crest",
+      "code": "T2-0602",
+      "building": "T2",
+      "floor": 6,
+      "type": "2br",
+      "view": "pool",
+      "areaSqft": 1150,
+      "bedrooms": 2,
+      "bathrooms": 2,
+      "priceAed": 2531000,
+      "availability": "reserved",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T2_F6_U02"
+    },
+    {
+      "id": "unit_t2_0603",
+      "projectId": "prj_azure_crest",
+      "code": "T2-0603",
+      "building": "T2",
+      "floor": 6,
+      "type": "2br",
+      "view": "city",
+      "areaSqft": 1190,
+      "bedrooms": 2,
+      "bathrooms": 3,
+      "priceAed": 2557000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T2_F6_U03"
+    },
+    {
+      "id": "unit_t2_0604",
+      "projectId": "prj_azure_crest",
+      "code": "T2-0604",
+      "building": "T2",
+      "floor": 6,
+      "type": "3br",
+      "view": "park",
+      "areaSqft": 1650,
+      "bedrooms": 3,
+      "bathrooms": 3,
+      "priceAed": 3718000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T2_F6_U04"
+    },
+    {
+      "id": "unit_t2_0701",
+      "projectId": "prj_azure_crest",
+      "code": "T2-0701",
+      "building": "T2",
+      "floor": 7,
+      "type": "1br",
+      "view": "park",
+      "areaSqft": 760,
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "priceAed": 1726000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T2_F7_U01"
+    },
+    {
+      "id": "unit_t2_0702",
+      "projectId": "prj_azure_crest",
+      "code": "T2-0702",
+      "building": "T2",
+      "floor": 7,
+      "type": "2br",
+      "view": "pool",
+      "areaSqft": 1150,
+      "bedrooms": 2,
+      "bathrooms": 2,
+      "priceAed": 2550000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T2_F7_U02"
+    },
+    {
+      "id": "unit_t2_0703",
+      "projectId": "prj_azure_crest",
+      "code": "T2-0703",
+      "building": "T2",
+      "floor": 7,
+      "type": "2br",
+      "view": "city",
+      "areaSqft": 1190,
+      "bedrooms": 2,
+      "bathrooms": 3,
+      "priceAed": 2576000,
+      "availability": "reserved",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T2_F7_U03"
+    },
+    {
+      "id": "unit_t2_0704",
+      "projectId": "prj_azure_crest",
+      "code": "T2-0704",
+      "building": "T2",
+      "floor": 7,
+      "type": "3br",
+      "view": "park",
+      "areaSqft": 1650,
+      "bedrooms": 3,
+      "bathrooms": 3,
+      "priceAed": 3746000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T2_F7_U04"
+    },
+    {
+      "id": "unit_t2_0801",
+      "projectId": "prj_azure_crest",
+      "code": "T2-0801",
+      "building": "T2",
+      "floor": 8,
+      "type": "1br",
+      "view": "park",
+      "areaSqft": 760,
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "priceAed": 1739000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T2_F8_U01"
+    },
+    {
+      "id": "unit_t2_0802",
+      "projectId": "prj_azure_crest",
+      "code": "T2-0802",
+      "building": "T2",
+      "floor": 8,
+      "type": "2br",
+      "view": "pool",
+      "areaSqft": 1150,
+      "bedrooms": 2,
+      "bathrooms": 2,
+      "priceAed": 2570000,
+      "availability": "sold",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T2_F8_U02"
+    },
+    {
+      "id": "unit_t2_0803",
+      "projectId": "prj_azure_crest",
+      "code": "T2-0803",
+      "building": "T2",
+      "floor": 8,
+      "type": "2br",
+      "view": "city",
+      "areaSqft": 1190,
+      "bedrooms": 2,
+      "bathrooms": 3,
+      "priceAed": 2596000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T2_F8_U03"
+    },
+    {
+      "id": "unit_t2_0804",
+      "projectId": "prj_azure_crest",
+      "code": "T2-0804",
+      "building": "T2",
+      "floor": 8,
+      "type": "3br",
+      "view": "park",
+      "areaSqft": 1650,
+      "bedrooms": 3,
+      "bathrooms": 3,
+      "priceAed": 3775000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T2_F8_U04"
+    },
+    {
+      "id": "unit_t2_0901",
+      "projectId": "prj_azure_crest",
+      "code": "T2-0901",
+      "building": "T2",
+      "floor": 9,
+      "type": "1br",
+      "view": "park",
+      "areaSqft": 760,
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "priceAed": 1752000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T2_F9_U01"
+    },
+    {
+      "id": "unit_t2_0902",
+      "projectId": "prj_azure_crest",
+      "code": "T2-0902",
+      "building": "T2",
+      "floor": 9,
+      "type": "2br",
+      "view": "pool",
+      "areaSqft": 1150,
+      "bedrooms": 2,
+      "bathrooms": 2,
+      "priceAed": 2589000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T2_F9_U02"
+    },
+    {
+      "id": "unit_t2_0903",
+      "projectId": "prj_azure_crest",
+      "code": "T2-0903",
+      "building": "T2",
+      "floor": 9,
+      "type": "2br",
+      "view": "city",
+      "areaSqft": 1190,
+      "bedrooms": 2,
+      "bathrooms": 3,
+      "priceAed": 2615000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T2_F9_U03"
+    },
+    {
+      "id": "unit_t2_0904",
+      "projectId": "prj_azure_crest",
+      "code": "T2-0904",
+      "building": "T2",
+      "floor": 9,
+      "type": "3br",
+      "view": "park",
+      "areaSqft": 1650,
+      "bedrooms": 3,
+      "bathrooms": 3,
+      "priceAed": 3803000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T2_F9_U04"
+    },
+    {
+      "id": "unit_t2_1001",
+      "projectId": "prj_azure_crest",
+      "code": "T2-1001",
+      "building": "T2",
+      "floor": 10,
+      "type": "1br",
+      "view": "park",
+      "areaSqft": 760,
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "priceAed": 1765000,
+      "availability": "reserved",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T2_F10_U01"
+    },
+    {
+      "id": "unit_t2_1002",
+      "projectId": "prj_azure_crest",
+      "code": "T2-1002",
+      "building": "T2",
+      "floor": 10,
+      "type": "2br",
+      "view": "pool",
+      "areaSqft": 1150,
+      "bedrooms": 2,
+      "bathrooms": 2,
+      "priceAed": 2608000,
+      "availability": "sold",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T2_F10_U02"
+    },
+    {
+      "id": "unit_t2_1003",
+      "projectId": "prj_azure_crest",
+      "code": "T2-1003",
+      "building": "T2",
+      "floor": 10,
+      "type": "2br",
+      "view": "city",
+      "areaSqft": 1190,
+      "bedrooms": 2,
+      "bathrooms": 3,
+      "priceAed": 2635000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T2_F10_U03"
+    },
+    {
+      "id": "unit_t2_1004",
+      "projectId": "prj_azure_crest",
+      "code": "T2-1004",
+      "building": "T2",
+      "floor": 10,
+      "type": "3br",
+      "view": "park",
+      "areaSqft": 1650,
+      "bedrooms": 3,
+      "bathrooms": 3,
+      "priceAed": 3831000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T2_F10_U04"
+    },
+    {
+      "id": "unit_t2_1101",
+      "projectId": "prj_azure_crest",
+      "code": "T2-1101",
+      "building": "T2",
+      "floor": 11,
+      "type": "1br",
+      "view": "park",
+      "areaSqft": 760,
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "priceAed": 1778000,
+      "availability": "sold",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T2_F11_U01"
+    },
+    {
+      "id": "unit_t2_1102",
+      "projectId": "prj_azure_crest",
+      "code": "T2-1102",
+      "building": "T2",
+      "floor": 11,
+      "type": "2br",
+      "view": "pool",
+      "areaSqft": 1150,
+      "bedrooms": 2,
+      "bathrooms": 2,
+      "priceAed": 2628000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T2_F11_U02"
+    },
+    {
+      "id": "unit_t2_1103",
+      "projectId": "prj_azure_crest",
+      "code": "T2-1103",
+      "building": "T2",
+      "floor": 11,
+      "type": "2br",
+      "view": "city",
+      "areaSqft": 1190,
+      "bedrooms": 2,
+      "bathrooms": 3,
+      "priceAed": 2654000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T2_F11_U03"
+    },
+    {
+      "id": "unit_t2_1104",
+      "projectId": "prj_azure_crest",
+      "code": "T2-1104",
+      "building": "T2",
+      "floor": 11,
+      "type": "3br",
+      "view": "park",
+      "areaSqft": 1650,
+      "bedrooms": 3,
+      "bathrooms": 3,
+      "priceAed": 3860000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T2_F11_U04"
+    },
+    {
+      "id": "unit_t2_1201",
+      "projectId": "prj_azure_crest",
+      "code": "T2-1201",
+      "building": "T2",
+      "floor": 12,
+      "type": "1br",
+      "view": "park",
+      "areaSqft": 760,
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "priceAed": 1791000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T2_F12_U01"
+    },
+    {
+      "id": "unit_t2_1202",
+      "projectId": "prj_azure_crest",
+      "code": "T2-1202",
+      "building": "T2",
+      "floor": 12,
+      "type": "2br",
+      "view": "pool",
+      "areaSqft": 1150,
+      "bedrooms": 2,
+      "bathrooms": 2,
+      "priceAed": 2647000,
+      "availability": "sold",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T2_F12_U02"
+    },
+    {
+      "id": "unit_t2_1203",
+      "projectId": "prj_azure_crest",
+      "code": "T2-1203",
+      "building": "T2",
+      "floor": 12,
+      "type": "2br",
+      "view": "city",
+      "areaSqft": 1190,
+      "bedrooms": 2,
+      "bathrooms": 3,
+      "priceAed": 2674000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T2_F12_U03"
+    },
+    {
+      "id": "unit_t2_1204",
+      "projectId": "prj_azure_crest",
+      "code": "T2-1204",
+      "building": "T2",
+      "floor": 12,
+      "type": "3br",
+      "view": "park",
+      "areaSqft": 1650,
+      "bedrooms": 3,
+      "bathrooms": 3,
+      "priceAed": 3888000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T2_F12_U04"
+    },
+    {
+      "id": "unit_t2_1301",
+      "projectId": "prj_azure_crest",
+      "code": "T2-1301",
+      "building": "T2",
+      "floor": 13,
+      "type": "1br",
+      "view": "park",
+      "areaSqft": 760,
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "priceAed": 1804000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T2_F13_U01"
+    },
+    {
+      "id": "unit_t2_1302",
+      "projectId": "prj_azure_crest",
+      "code": "T2-1302",
+      "building": "T2",
+      "floor": 13,
+      "type": "2br",
+      "view": "pool",
+      "areaSqft": 1150,
+      "bedrooms": 2,
+      "bathrooms": 2,
+      "priceAed": 2666000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T2_F13_U02"
+    },
+    {
+      "id": "unit_t2_1303",
+      "projectId": "prj_azure_crest",
+      "code": "T2-1303",
+      "building": "T2",
+      "floor": 13,
+      "type": "2br",
+      "view": "city",
+      "areaSqft": 1190,
+      "bedrooms": 2,
+      "bathrooms": 3,
+      "priceAed": 2693000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T2_F13_U03"
+    },
+    {
+      "id": "unit_t2_1304",
+      "projectId": "prj_azure_crest",
+      "code": "T2-1304",
+      "building": "T2",
+      "floor": 13,
+      "type": "3br",
+      "view": "park",
+      "areaSqft": 1650,
+      "bedrooms": 3,
+      "bathrooms": 3,
+      "priceAed": 3916000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T2_F13_U04"
+    },
+    {
+      "id": "unit_t2_1401",
+      "projectId": "prj_azure_crest",
+      "code": "T2-1401",
+      "building": "T2",
+      "floor": 14,
+      "type": "1br",
+      "view": "park",
+      "areaSqft": 760,
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "priceAed": 1817000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T2_F14_U01"
+    },
+    {
+      "id": "unit_t2_1402",
+      "projectId": "prj_azure_crest",
+      "code": "T2-1402",
+      "building": "T2",
+      "floor": 14,
+      "type": "2br",
+      "view": "pool",
+      "areaSqft": 1150,
+      "bedrooms": 2,
+      "bathrooms": 2,
+      "priceAed": 2685000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T2_F14_U02"
+    },
+    {
+      "id": "unit_t2_1403",
+      "projectId": "prj_azure_crest",
+      "code": "T2-1403",
+      "building": "T2",
+      "floor": 14,
+      "type": "2br",
+      "view": "city",
+      "areaSqft": 1190,
+      "bedrooms": 2,
+      "bathrooms": 3,
+      "priceAed": 2713000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T2_F14_U03"
+    },
+    {
+      "id": "unit_t2_1404",
+      "projectId": "prj_azure_crest",
+      "code": "T2-1404",
+      "building": "T2",
+      "floor": 14,
+      "type": "3br",
+      "view": "park",
+      "areaSqft": 1650,
+      "bedrooms": 3,
+      "bathrooms": 3,
+      "priceAed": 3945000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T2_F14_U04"
+    },
+    {
+      "id": "unit_t2_1501",
+      "projectId": "prj_azure_crest",
+      "code": "T2-1501",
+      "building": "T2",
+      "floor": 15,
+      "type": "1br",
+      "view": "park",
+      "areaSqft": 760,
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "priceAed": 1830000,
+      "availability": "hold",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T2_F15_U01"
+    },
+    {
+      "id": "unit_t2_1502",
+      "projectId": "prj_azure_crest",
+      "code": "T2-1502",
+      "building": "T2",
+      "floor": 15,
+      "type": "2br",
+      "view": "pool",
+      "areaSqft": 1150,
+      "bedrooms": 2,
+      "bathrooms": 2,
+      "priceAed": 2705000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T2_F15_U02"
+    },
+    {
+      "id": "unit_t2_1503",
+      "projectId": "prj_azure_crest",
+      "code": "T2-1503",
+      "building": "T2",
+      "floor": 15,
+      "type": "2br",
+      "view": "city",
+      "areaSqft": 1190,
+      "bedrooms": 2,
+      "bathrooms": 3,
+      "priceAed": 2732000,
+      "availability": "reserved",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T2_F15_U03"
+    },
+    {
+      "id": "unit_t2_1504",
+      "projectId": "prj_azure_crest",
+      "code": "T2-1504",
+      "building": "T2",
+      "floor": 15,
+      "type": "3br",
+      "view": "park",
+      "areaSqft": 1650,
+      "bedrooms": 3,
+      "bathrooms": 3,
+      "priceAed": 3973000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40"
+      ],
+      "meshId": "T2_F15_U04"
+    },
+    {
+      "id": "unit_t2_1601",
+      "projectId": "prj_azure_crest",
+      "code": "T2-1601",
+      "building": "T2",
+      "floor": 16,
+      "type": "1br",
+      "view": "park",
+      "areaSqft": 760,
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "priceAed": 1843000,
+      "availability": "sold",
+      "paymentPlanIds": [
+        "pp_60_40",
+        "pp_post_handover"
+      ],
+      "meshId": "T2_F16_U01"
+    },
+    {
+      "id": "unit_t2_1602",
+      "projectId": "prj_azure_crest",
+      "code": "T2-1602",
+      "building": "T2",
+      "floor": 16,
+      "type": "2br",
+      "view": "pool",
+      "areaSqft": 1150,
+      "bedrooms": 2,
+      "bathrooms": 2,
+      "priceAed": 2724000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40",
+        "pp_post_handover"
+      ],
+      "meshId": "T2_F16_U02"
+    },
+    {
+      "id": "unit_t2_1603",
+      "projectId": "prj_azure_crest",
+      "code": "T2-1603",
+      "building": "T2",
+      "floor": 16,
+      "type": "2br",
+      "view": "city",
+      "areaSqft": 1190,
+      "bedrooms": 2,
+      "bathrooms": 3,
+      "priceAed": 2752000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40",
+        "pp_post_handover"
+      ],
+      "meshId": "T2_F16_U03"
+    },
+    {
+      "id": "unit_t2_1604",
+      "projectId": "prj_azure_crest",
+      "code": "T2-1604",
+      "building": "T2",
+      "floor": 16,
+      "type": "3br",
+      "view": "park",
+      "areaSqft": 1650,
+      "bedrooms": 3,
+      "bathrooms": 3,
+      "priceAed": 4002000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40",
+        "pp_post_handover"
+      ],
+      "meshId": "T2_F16_U04"
+    },
+    {
+      "id": "unit_t2_1701",
+      "projectId": "prj_azure_crest",
+      "code": "T2-1701",
+      "building": "T2",
+      "floor": 17,
+      "type": "1br",
+      "view": "park",
+      "areaSqft": 760,
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "priceAed": 1856000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40",
+        "pp_post_handover"
+      ],
+      "meshId": "T2_F17_U01"
+    },
+    {
+      "id": "unit_t2_1702",
+      "projectId": "prj_azure_crest",
+      "code": "T2-1702",
+      "building": "T2",
+      "floor": 17,
+      "type": "2br",
+      "view": "pool",
+      "areaSqft": 1150,
+      "bedrooms": 2,
+      "bathrooms": 2,
+      "priceAed": 2743000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40",
+        "pp_post_handover"
+      ],
+      "meshId": "T2_F17_U02"
+    },
+    {
+      "id": "unit_t2_1703",
+      "projectId": "prj_azure_crest",
+      "code": "T2-1703",
+      "building": "T2",
+      "floor": 17,
+      "type": "2br",
+      "view": "city",
+      "areaSqft": 1190,
+      "bedrooms": 2,
+      "bathrooms": 3,
+      "priceAed": 2771000,
+      "availability": "hold",
+      "paymentPlanIds": [
+        "pp_60_40",
+        "pp_post_handover"
+      ],
+      "meshId": "T2_F17_U03"
+    },
+    {
+      "id": "unit_t2_1704",
+      "projectId": "prj_azure_crest",
+      "code": "T2-1704",
+      "building": "T2",
+      "floor": 17,
+      "type": "3br",
+      "view": "park",
+      "areaSqft": 1650,
+      "bedrooms": 3,
+      "bathrooms": 3,
+      "priceAed": 4030000,
+      "availability": "reserved",
+      "paymentPlanIds": [
+        "pp_60_40",
+        "pp_post_handover"
+      ],
+      "meshId": "T2_F17_U04"
+    },
+    {
+      "id": "unit_t2_1801",
+      "projectId": "prj_azure_crest",
+      "code": "T2-1801",
+      "building": "T2",
+      "floor": 18,
+      "type": "1br",
+      "view": "park",
+      "areaSqft": 760,
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "priceAed": 1869000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40",
+        "pp_post_handover"
+      ],
+      "meshId": "T2_F18_U01"
+    },
+    {
+      "id": "unit_t2_1802",
+      "projectId": "prj_azure_crest",
+      "code": "T2-1802",
+      "building": "T2",
+      "floor": 18,
+      "type": "2br",
+      "view": "pool",
+      "areaSqft": 1150,
+      "bedrooms": 2,
+      "bathrooms": 2,
+      "priceAed": 2763000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40",
+        "pp_post_handover"
+      ],
+      "meshId": "T2_F18_U02"
+    },
+    {
+      "id": "unit_t2_1803",
+      "projectId": "prj_azure_crest",
+      "code": "T2-1803",
+      "building": "T2",
+      "floor": 18,
+      "type": "2br",
+      "view": "city",
+      "areaSqft": 1190,
+      "bedrooms": 2,
+      "bathrooms": 3,
+      "priceAed": 2791000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40",
+        "pp_post_handover"
+      ],
+      "meshId": "T2_F18_U03"
+    },
+    {
+      "id": "unit_t2_1804",
+      "projectId": "prj_azure_crest",
+      "code": "T2-1804",
+      "building": "T2",
+      "floor": 18,
+      "type": "penthouse",
+      "view": "park",
+      "areaSqft": 3200,
+      "bedrooms": 4,
+      "bathrooms": 5,
+      "priceAed": 7871000,
+      "availability": "available",
+      "paymentPlanIds": [
+        "pp_60_40",
+        "pp_post_handover"
+      ],
+      "meshId": "T2_F18_U04"
+    }
+  ],
+  "salespeople": [
+    {
+      "id": "sp_layla",
+      "name": "Layla (sample agent)",
+      "languages": [
+        "ar",
+        "en"
+      ],
+      "unitTypes": [
+        "2br",
+        "3br",
+        "penthouse"
+      ],
+      "available": true
+    },
+    {
+      "id": "sp_omar",
+      "name": "Omar (sample agent)",
+      "languages": [
+        "ar"
+      ],
+      "unitTypes": [
+        "studio",
+        "1br",
+        "2br"
+      ],
+      "available": true
+    },
+    {
+      "id": "sp_james",
+      "name": "James (sample agent)",
+      "languages": [
+        "en"
+      ],
+      "unitTypes": [
+        "studio",
+        "1br",
+        "2br",
+        "3br"
+      ],
+      "available": true
+    },
+    {
+      "id": "sp_priya",
+      "name": "Priya (sample agent)",
+      "languages": [
+        "en"
+      ],
+      "unitTypes": [
+        "penthouse",
+        "3br",
+        "4br",
+        "townhouse"
+      ],
+      "available": false
+    }
+  ]
+}

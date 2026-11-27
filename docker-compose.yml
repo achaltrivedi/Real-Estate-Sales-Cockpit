@@ -1,0 +1,19 @@
+# Local infra only. The demo also runs WITHOUT this (DATA_DRIVER=memory).
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: gsc
+      POSTGRES_PASSWORD: gsc
+      POSTGRES_DB: gsc
+    ports: ["5432:5432"]
+    volumes: [pgdata:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U gsc"]
+      interval: 5s
+      retries: 10
+  redis:
+    image: redis:7-alpine
+    ports: ["6379:6379"]
+volumes:
+  pgdata:

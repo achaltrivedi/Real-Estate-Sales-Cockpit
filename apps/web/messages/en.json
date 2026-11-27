@@ -1,0 +1,14 @@
+{
+  "common": {
+    "sample": "SAMPLE DATA · Fictional project for demonstration only",
+    "switchLocale": "العربية"
+  },
+  "home": {
+    "eyebrow": "Project Sales Cockpit",
+    "cta": "Explore units",
+    "calculator": "Payment plans",
+    "apiDown": "API not reachable. Run `pnpm dev` from the repo root."
+  },
+  "explorer": { "title": "Unit explorer", "loading": "Loading units…", "units": "units" },
+  "calculator": { "title": "Payment-plan calculator" }
+}

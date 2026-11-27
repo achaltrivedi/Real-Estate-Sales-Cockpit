@@ -1,0 +1,10 @@
+{
+  "name": "@gsc/crm",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": { ".": "./src/index.ts" },
+  "scripts": { "typecheck": "tsc -p tsconfig.json" },
+  "dependencies": { "@gsc/contracts": "workspace:*" },
+  "devDependencies": { "@gsc/config": "workspace:*", "typescript": "5.7.2", "@types/node": "22.10.2" }
+}

@@ -1,0 +1,20 @@
+{
+  "name": "@gsc/qualifier",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": { ".": "./src/index.ts" },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@gsc/contracts": "workspace:*"
+  },
+  "devDependencies": {
+    "@gsc/config": "workspace:*",
+    "typescript": "5.7.2",
+    "vitest": "2.1.8",
+    "@types/node": "22.10.2"
+  }
+}

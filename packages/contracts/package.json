@@ -1,0 +1,26 @@
+{
+  "name": "@gsc/contracts",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./client": "./src/client.ts"
+  },
+  "scripts": {
+    "openapi": "tsx scripts/generate-openapi.ts",
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "zod": "3.24.1"
+  },
+  "devDependencies": {
+    "@asteasolutions/zod-to-openapi": "7.3.0",
+    "@gsc/config": "workspace:*",
+    "tsx": "4.19.2",
+    "typescript": "5.7.2",
+    "vitest": "2.1.8",
+    "@types/node": "22.10.2"
+  }
+}

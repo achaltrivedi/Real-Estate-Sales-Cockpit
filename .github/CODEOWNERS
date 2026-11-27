@@ -1,0 +1,27 @@
+# One owner per folder (plan §4). Replace the placeholders with real GitHub handles
+# before turning on "Require review from Code Owners" in branch protection for `main`.
+#   DEV_A = Experience lane   DEV_B = Engine lane
+
+# ---- Joint (both approvals required) ----
+*                          @DEV_A_HANDLE @DEV_B_HANDLE
+/packages/contracts/       @DEV_A_HANDLE @DEV_B_HANDLE
+/assets/seed/              @DEV_A_HANDLE @DEV_B_HANDLE
+/packages/config/          @DEV_A_HANDLE @DEV_B_HANDLE
+/docs/                     @DEV_A_HANDLE @DEV_B_HANDLE
+/.github/                  @DEV_A_HANDLE @DEV_B_HANDLE
+/docker-compose.yml        @DEV_A_HANDLE @DEV_B_HANDLE
+/scripts/check-boundaries.mjs @DEV_A_HANDLE @DEV_B_HANDLE
+
+# ---- Dev A: Experience (what the buyer sees) ----
+/apps/web/                 @DEV_A_HANDLE
+/packages/ui/              @DEV_A_HANDLE
+/packages/3d/              @DEV_A_HANDLE
+/assets/models/            @DEV_A_HANDLE
+
+# ---- Dev B: Engine (what happens behind the scenes) ----
+/apps/api/                 @DEV_B_HANDLE
+/apps/dashboard/           @DEV_B_HANDLE
+/packages/qualifier/       @DEV_B_HANDLE
+/packages/messaging/       @DEV_B_HANDLE
+/packages/crm/             @DEV_B_HANDLE
+/packages/db/              @DEV_B_HANDLE

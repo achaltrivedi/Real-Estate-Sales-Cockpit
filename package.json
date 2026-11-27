@@ -1,0 +1,27 @@
+{
+  "name": "genesis-sales-cockpit",
+  "private": true,
+  "packageManager": "pnpm@10.12.1",
+  "engines": { "node": ">=20.11" },
+  "pnpm": { "onlyBuiltDependencies": ["esbuild"] },
+  "scripts": {
+    "dev": "turbo run dev",
+    "dev:a": "turbo run dev --filter=@gsc/web --filter=@gsc/api",
+    "dev:b": "turbo run dev --filter=@gsc/api --filter=@gsc/dashboard",
+    "build": "turbo run build",
+    "typecheck": "turbo run typecheck",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "check:boundaries": "node scripts/check-boundaries.mjs",
+    "openapi": "pnpm --filter @gsc/contracts openapi",
+    "mock:prism": "pnpm dlx @stoplight/prism-cli@5.12.0 mock packages/contracts/openapi.json -p 4010",
+    "db:up": "docker compose up -d",
+    "db:down": "docker compose down",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "prettier": "3.4.2",
+    "turbo": "2.3.3",
+    "typescript": "5.7.2"
+  }
+}

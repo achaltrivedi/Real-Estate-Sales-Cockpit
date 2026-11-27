@@ -1,0 +1,1880 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Genesis Sales Cockpit API",
+    "version": "0.1.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:4000"
+    }
+  ],
+  "components": {
+    "schemas": {},
+    "parameters": {}
+  },
+  "paths": {
+    "/projects/{id}": {
+      "get": {
+        "operationId": "getProject",
+        "summary": "Project + payment plans",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "project": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "nameAr": {
+                          "type": "string"
+                        },
+                        "developer": {
+                          "type": "string"
+                        },
+                        "location": {
+                          "type": "string"
+                        },
+                        "handoverDate": {
+                          "type": "string"
+                        },
+                        "currency": {
+                          "type": "string",
+                          "enum": [
+                            "AED"
+                          ]
+                        },
+                        "sample": {
+                          "type": "boolean",
+                          "enum": [
+                            true
+                          ]
+                        },
+                        "disclaimer": {
+                          "type": "string"
+                        },
+                        "buildings": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "floors": {
+                                "type": "integer"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "name",
+                              "floors"
+                            ]
+                          }
+                        },
+                        "modelUrl": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "nameAr",
+                        "developer",
+                        "location",
+                        "handoverDate",
+                        "currency",
+                        "sample",
+                        "disclaimer",
+                        "buildings"
+                      ]
+                    },
+                    "paymentPlans": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "projectId": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "nameAr": {
+                            "type": "string"
+                          },
+                          "dldFeePercent": {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 10
+                          },
+                          "milestones": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "label": {
+                                  "type": "string"
+                                },
+                                "labelAr": {
+                                  "type": "string"
+                                },
+                                "percent": {
+                                  "type": "number",
+                                  "minimum": 0,
+                                  "maximum": 100
+                                },
+                                "trigger": {
+                                  "type": "string",
+                                  "enum": [
+                                    "on_booking",
+                                    "construction",
+                                    "on_handover",
+                                    "post_handover"
+                                  ]
+                                },
+                                "monthOffset": {
+                                  "type": "integer",
+                                  "minimum": 0
+                                }
+                              },
+                              "required": [
+                                "label",
+                                "labelAr",
+                                "percent",
+                                "trigger",
+                                "monthOffset"
+                              ]
+                            },
+                            "minItems": 1
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "projectId",
+                          "name",
+                          "nameAr",
+                          "dldFeePercent",
+                          "milestones"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "project",
+                    "paymentPlans"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/projects/{id}/units": {
+      "get": {
+        "operationId": "listUnits",
+        "summary": "Filterable unit inventory",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "enum": [
+                "studio",
+                "1br",
+                "2br",
+                "3br",
+                "4br",
+                "penthouse",
+                "townhouse"
+              ]
+            },
+            "required": false,
+            "name": "type",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "enum": [
+                "sea",
+                "city",
+                "park",
+                "pool",
+                "marina"
+              ]
+            },
+            "required": false,
+            "name": "view",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "enum": [
+                "available",
+                "reserved",
+                "sold",
+                "hold"
+              ]
+            },
+            "required": false,
+            "name": "availability",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "number",
+              "nullable": true
+            },
+            "required": false,
+            "name": "minPrice",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "number",
+              "nullable": true
+            },
+            "required": false,
+            "name": "maxPrice",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "number",
+              "nullable": true
+            },
+            "required": false,
+            "name": "minFloor",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "number",
+              "nullable": true
+            },
+            "required": false,
+            "name": "maxFloor",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "units": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "projectId": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "code": {
+                            "type": "string"
+                          },
+                          "building": {
+                            "type": "string"
+                          },
+                          "floor": {
+                            "type": "integer"
+                          },
+                          "type": {
+                            "type": "string",
+                            "enum": [
+                              "studio",
+                              "1br",
+                              "2br",
+                              "3br",
+                              "4br",
+                              "penthouse",
+                              "townhouse"
+                            ]
+                          },
+                          "view": {
+                            "type": "string",
+                            "enum": [
+                              "sea",
+                              "city",
+                              "park",
+                              "pool",
+                              "marina"
+                            ]
+                          },
+                          "areaSqft": {
+                            "type": "number",
+                            "minimum": 0,
+                            "exclusiveMinimum": true
+                          },
+                          "bedrooms": {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          "bathrooms": {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          "priceAed": {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          "availability": {
+                            "type": "string",
+                            "enum": [
+                              "available",
+                              "reserved",
+                              "sold",
+                              "hold"
+                            ]
+                          },
+                          "paymentPlanIds": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "meshId": {
+                            "type": "string"
+                          },
+                          "floorplanUrl": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "projectId",
+                          "code",
+                          "building",
+                          "floor",
+                          "type",
+                          "view",
+                          "areaSqft",
+                          "bedrooms",
+                          "bathrooms",
+                          "priceAed",
+                          "availability",
+                          "paymentPlanIds"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "units"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/leads": {
+      "post": {
+        "operationId": "createLead",
+        "summary": "Create lead from the chat widget; conversation contains the instant reply",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "projectId": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "locale": {
+                    "type": "string",
+                    "enum": [
+                      "en",
+                      "ar"
+                    ]
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "phone": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "unitId": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "consent": {
+                    "type": "boolean",
+                    "enum": [
+                      true
+                    ]
+                  },
+                  "consentText": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "projectId",
+                  "locale",
+                  "consent",
+                  "consentText"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "lead": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "projectId": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "phone": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string",
+                          "format": "email"
+                        },
+                        "locale": {
+                          "type": "string",
+                          "enum": [
+                            "en",
+                            "ar"
+                          ]
+                        },
+                        "source": {
+                          "type": "string",
+                          "enum": [
+                            "web_widget",
+                            "whatsapp",
+                            "manual"
+                          ]
+                        },
+                        "stage": {
+                          "type": "string",
+                          "enum": [
+                            "new",
+                            "contacted",
+                            "qualified",
+                            "viewing_booked",
+                            "viewed",
+                            "reserved",
+                            "lost"
+                          ]
+                        },
+                        "consent": {
+                          "type": "object",
+                          "properties": {
+                            "given": {
+                              "type": "boolean",
+                              "enum": [
+                                true
+                              ]
+                            },
+                            "at": {
+                              "type": "string",
+                              "format": "date-time"
+                            },
+                            "text": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "given",
+                            "at",
+                            "text"
+                          ]
+                        },
+                        "optedOut": {
+                          "type": "boolean"
+                        },
+                        "interestedUnitIds": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "qualification": {
+                          "type": "object",
+                          "properties": {
+                            "budgetMinAed": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "budgetMaxAed": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "timeline": {
+                              "type": "string",
+                              "enum": [
+                                "now",
+                                "0_3_months",
+                                "3_6_months",
+                                "6_12_months",
+                                "exploring"
+                              ]
+                            },
+                            "unitType": {
+                              "type": "string",
+                              "enum": [
+                                "studio",
+                                "1br",
+                                "2br",
+                                "3br",
+                                "4br",
+                                "penthouse",
+                                "townhouse"
+                              ]
+                            },
+                            "purpose": {
+                              "type": "string",
+                              "enum": [
+                                "investor",
+                                "end_user"
+                              ]
+                            },
+                            "score": {
+                              "type": "number",
+                              "minimum": 0,
+                              "maximum": 100
+                            },
+                            "isQualified": {
+                              "type": "boolean"
+                            },
+                            "missing": {
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "enum": [
+                                  "budget",
+                                  "timeline",
+                                  "unitType",
+                                  "purpose"
+                                ]
+                              }
+                            }
+                          },
+                          "required": [
+                            "score",
+                            "isQualified",
+                            "missing"
+                          ]
+                        },
+                        "assignedToId": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "conversationId": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "firstResponseMs": {
+                          "type": "integer",
+                          "minimum": 0
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "projectId",
+                        "locale",
+                        "source",
+                        "stage",
+                        "consent",
+                        "optedOut",
+                        "interestedUnitIds",
+                        "qualification",
+                        "conversationId",
+                        "createdAt",
+                        "updatedAt"
+                      ]
+                    },
+                    "conversation": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "leadId": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "status": {
+                          "type": "string",
+                          "enum": [
+                            "bot",
+                            "human",
+                            "closed"
+                          ]
+                        },
+                        "messages": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "conversationId": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "role": {
+                                "type": "string",
+                                "enum": [
+                                  "buyer",
+                                  "assistant",
+                                  "agent",
+                                  "system"
+                                ]
+                              },
+                              "channel": {
+                                "type": "string",
+                                "enum": [
+                                  "web",
+                                  "whatsapp"
+                                ]
+                              },
+                              "text": {
+                                "type": "string"
+                              },
+                              "quickReplies": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "string"
+                                    },
+                                    "label": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "id",
+                                    "label"
+                                  ]
+                                }
+                              },
+                              "createdAt": {
+                                "type": "string",
+                                "format": "date-time"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "conversationId",
+                              "role",
+                              "channel",
+                              "text",
+                              "createdAt"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "leadId",
+                        "status",
+                        "messages"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "lead",
+                    "conversation"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "operationId": "listLeads",
+        "summary": "Leads for the dashboard",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "enum": [
+                "new",
+                "contacted",
+                "qualified",
+                "viewing_booked",
+                "viewed",
+                "reserved",
+                "lost"
+              ]
+            },
+            "required": false,
+            "name": "stage",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "required": false,
+            "name": "projectId",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "leads": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "projectId": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "phone": {
+                            "type": "string"
+                          },
+                          "email": {
+                            "type": "string",
+                            "format": "email"
+                          },
+                          "locale": {
+                            "type": "string",
+                            "enum": [
+                              "en",
+                              "ar"
+                            ]
+                          },
+                          "source": {
+                            "type": "string",
+                            "enum": [
+                              "web_widget",
+                              "whatsapp",
+                              "manual"
+                            ]
+                          },
+                          "stage": {
+                            "type": "string",
+                            "enum": [
+                              "new",
+                              "contacted",
+                              "qualified",
+                              "viewing_booked",
+                              "viewed",
+                              "reserved",
+                              "lost"
+                            ]
+                          },
+                          "consent": {
+                            "type": "object",
+                            "properties": {
+                              "given": {
+                                "type": "boolean",
+                                "enum": [
+                                  true
+                                ]
+                              },
+                              "at": {
+                                "type": "string",
+                                "format": "date-time"
+                              },
+                              "text": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "given",
+                              "at",
+                              "text"
+                            ]
+                          },
+                          "optedOut": {
+                            "type": "boolean"
+                          },
+                          "interestedUnitIds": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "qualification": {
+                            "type": "object",
+                            "properties": {
+                              "budgetMinAed": {
+                                "type": "integer",
+                                "minimum": 0
+                              },
+                              "budgetMaxAed": {
+                                "type": "integer",
+                                "minimum": 0
+                              },
+                              "timeline": {
+                                "type": "string",
+                                "enum": [
+                                  "now",
+                                  "0_3_months",
+                                  "3_6_months",
+                                  "6_12_months",
+                                  "exploring"
+                                ]
+                              },
+                              "unitType": {
+                                "type": "string",
+                                "enum": [
+                                  "studio",
+                                  "1br",
+                                  "2br",
+                                  "3br",
+                                  "4br",
+                                  "penthouse",
+                                  "townhouse"
+                                ]
+                              },
+                              "purpose": {
+                                "type": "string",
+                                "enum": [
+                                  "investor",
+                                  "end_user"
+                                ]
+                              },
+                              "score": {
+                                "type": "number",
+                                "minimum": 0,
+                                "maximum": 100
+                              },
+                              "isQualified": {
+                                "type": "boolean"
+                              },
+                              "missing": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string",
+                                  "enum": [
+                                    "budget",
+                                    "timeline",
+                                    "unitType",
+                                    "purpose"
+                                  ]
+                                }
+                              }
+                            },
+                            "required": [
+                              "score",
+                              "isQualified",
+                              "missing"
+                            ]
+                          },
+                          "assignedToId": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "conversationId": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "firstResponseMs": {
+                            "type": "integer",
+                            "minimum": 0
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "projectId",
+                          "locale",
+                          "source",
+                          "stage",
+                          "consent",
+                          "optedOut",
+                          "interestedUnitIds",
+                          "qualification",
+                          "conversationId",
+                          "createdAt",
+                          "updatedAt"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "leads"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/leads/{id}": {
+      "patch": {
+        "operationId": "patchLead",
+        "summary": "Update stage / assignment",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "stage": {
+                    "type": "string",
+                    "enum": [
+                      "new",
+                      "contacted",
+                      "qualified",
+                      "viewing_booked",
+                      "viewed",
+                      "reserved",
+                      "lost"
+                    ]
+                  },
+                  "assignedToId": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "projectId": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "phone": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string",
+                      "format": "email"
+                    },
+                    "locale": {
+                      "type": "string",
+                      "enum": [
+                        "en",
+                        "ar"
+                      ]
+                    },
+                    "source": {
+                      "type": "string",
+                      "enum": [
+                        "web_widget",
+                        "whatsapp",
+                        "manual"
+                      ]
+                    },
+                    "stage": {
+                      "type": "string",
+                      "enum": [
+                        "new",
+                        "contacted",
+                        "qualified",
+                        "viewing_booked",
+                        "viewed",
+                        "reserved",
+                        "lost"
+                      ]
+                    },
+                    "consent": {
+                      "type": "object",
+                      "properties": {
+                        "given": {
+                          "type": "boolean",
+                          "enum": [
+                            true
+                          ]
+                        },
+                        "at": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "text": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "given",
+                        "at",
+                        "text"
+                      ]
+                    },
+                    "optedOut": {
+                      "type": "boolean"
+                    },
+                    "interestedUnitIds": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "qualification": {
+                      "type": "object",
+                      "properties": {
+                        "budgetMinAed": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "budgetMaxAed": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "timeline": {
+                          "type": "string",
+                          "enum": [
+                            "now",
+                            "0_3_months",
+                            "3_6_months",
+                            "6_12_months",
+                            "exploring"
+                          ]
+                        },
+                        "unitType": {
+                          "type": "string",
+                          "enum": [
+                            "studio",
+                            "1br",
+                            "2br",
+                            "3br",
+                            "4br",
+                            "penthouse",
+                            "townhouse"
+                          ]
+                        },
+                        "purpose": {
+                          "type": "string",
+                          "enum": [
+                            "investor",
+                            "end_user"
+                          ]
+                        },
+                        "score": {
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 100
+                        },
+                        "isQualified": {
+                          "type": "boolean"
+                        },
+                        "missing": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "enum": [
+                              "budget",
+                              "timeline",
+                              "unitType",
+                              "purpose"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "score",
+                        "isQualified",
+                        "missing"
+                      ]
+                    },
+                    "assignedToId": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "conversationId": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "firstResponseMs": {
+                      "type": "integer",
+                      "minimum": 0
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "projectId",
+                    "locale",
+                    "source",
+                    "stage",
+                    "consent",
+                    "optedOut",
+                    "interestedUnitIds",
+                    "qualification",
+                    "conversationId",
+                    "createdAt",
+                    "updatedAt"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/conversations/{id}": {
+      "get": {
+        "operationId": "getConversation",
+        "summary": "Full conversation",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "leadId": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "bot",
+                        "human",
+                        "closed"
+                      ]
+                    },
+                    "messages": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "conversationId": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "role": {
+                            "type": "string",
+                            "enum": [
+                              "buyer",
+                              "assistant",
+                              "agent",
+                              "system"
+                            ]
+                          },
+                          "channel": {
+                            "type": "string",
+                            "enum": [
+                              "web",
+                              "whatsapp"
+                            ]
+                          },
+                          "text": {
+                            "type": "string"
+                          },
+                          "quickReplies": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "label": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id",
+                                "label"
+                              ]
+                            }
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "conversationId",
+                          "role",
+                          "channel",
+                          "text",
+                          "createdAt"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "leadId",
+                    "status",
+                    "messages"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/conversations/{id}/messages": {
+      "post": {
+        "operationId": "sendMessage",
+        "summary": "Buyer message -> qualifier replies",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "text": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 2000
+                  },
+                  "quickReplyId": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "text"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "messages": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "conversationId": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "role": {
+                            "type": "string",
+                            "enum": [
+                              "buyer",
+                              "assistant",
+                              "agent",
+                              "system"
+                            ]
+                          },
+                          "channel": {
+                            "type": "string",
+                            "enum": [
+                              "web",
+                              "whatsapp"
+                            ]
+                          },
+                          "text": {
+                            "type": "string"
+                          },
+                          "quickReplies": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "label": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id",
+                                "label"
+                              ]
+                            }
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "conversationId",
+                          "role",
+                          "channel",
+                          "text",
+                          "createdAt"
+                        ]
+                      }
+                    },
+                    "qualification": {
+                      "type": "object",
+                      "properties": {
+                        "budgetMinAed": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "budgetMaxAed": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "timeline": {
+                          "type": "string",
+                          "enum": [
+                            "now",
+                            "0_3_months",
+                            "3_6_months",
+                            "6_12_months",
+                            "exploring"
+                          ]
+                        },
+                        "unitType": {
+                          "type": "string",
+                          "enum": [
+                            "studio",
+                            "1br",
+                            "2br",
+                            "3br",
+                            "4br",
+                            "penthouse",
+                            "townhouse"
+                          ]
+                        },
+                        "purpose": {
+                          "type": "string",
+                          "enum": [
+                            "investor",
+                            "end_user"
+                          ]
+                        },
+                        "score": {
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 100
+                        },
+                        "isQualified": {
+                          "type": "boolean"
+                        },
+                        "missing": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "enum": [
+                              "budget",
+                              "timeline",
+                              "unitType",
+                              "purpose"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "score",
+                        "isQualified",
+                        "missing"
+                      ]
+                    },
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "bot",
+                        "human",
+                        "closed"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "messages",
+                    "qualification",
+                    "status"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/conversations/{id}/handoff": {
+      "post": {
+        "operationId": "requestHandoff",
+        "summary": "Hand the conversation to a human",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "leadId": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "bot",
+                        "human",
+                        "closed"
+                      ]
+                    },
+                    "messages": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "conversationId": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "role": {
+                            "type": "string",
+                            "enum": [
+                              "buyer",
+                              "assistant",
+                              "agent",
+                              "system"
+                            ]
+                          },
+                          "channel": {
+                            "type": "string",
+                            "enum": [
+                              "web",
+                              "whatsapp"
+                            ]
+                          },
+                          "text": {
+                            "type": "string"
+                          },
+                          "quickReplies": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "label": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id",
+                                "label"
+                              ]
+                            }
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "conversationId",
+                          "role",
+                          "channel",
+                          "text",
+                          "createdAt"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "leadId",
+                    "status",
+                    "messages"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/viewings": {
+      "post": {
+        "operationId": "createViewing",
+        "summary": "Book a viewing",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "leadId": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "unitId": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "startsAt": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "mode": {
+                    "type": "string",
+                    "enum": [
+                      "in_person",
+                      "video_call"
+                    ]
+                  }
+                },
+                "required": [
+                  "leadId",
+                  "startsAt",
+                  "mode"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "leadId": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "unitId": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "salespersonId": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "startsAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "mode": {
+                      "type": "string",
+                      "enum": [
+                        "in_person",
+                        "video_call"
+                      ]
+                    },
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "booked",
+                        "done",
+                        "no_show",
+                        "cancelled"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "leadId",
+                    "startsAt",
+                    "mode",
+                    "status"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/metrics/funnel": {
+      "get": {
+        "operationId": "getFunnel",
+        "summary": "Funnel counts + response-time metric",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "buckets": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "bucket": {
+                            "type": "string",
+                            "enum": [
+                              "lead",
+                              "qualified",
+                              "viewing",
+                              "reservation"
+                            ]
+                          },
+                          "count": {
+                            "type": "integer"
+                          }
+                        },
+                        "required": [
+                          "bucket",
+                          "count"
+                        ]
+                      }
+                    },
+                    "medianFirstResponseMs": {
+                      "type": "integer",
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "buckets",
+                    "medianFirstResponseMs"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/webhooks/whatsapp": {
+      "post": {
+        "operationId": "whatsappWebhook",
+        "summary": "WhatsApp Cloud API inbound",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "object": {
+                    "type": "string"
+                  },
+                  "entry": {
+                    "type": "array",
+                    "items": {
+                      "nullable": true
+                    }
+                  }
+                },
+                "required": [
+                  "object",
+                  "entry"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ok": {
+                      "type": "boolean",
+                      "enum": [
+                        true
+                      ]
+                    }
+                  },
+                  "required": [
+                    "ok"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
