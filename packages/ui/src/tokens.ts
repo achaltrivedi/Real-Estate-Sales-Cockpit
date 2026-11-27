@@ -26,10 +26,11 @@ export const tokens = {
     },
   },
   radius: { card: '16px', pill: '999px' },
-  /** Families come from CSS variables set by each app's font loader (next/font), with safe fallbacks. */
+  /** Families come from CSS variables set by each app's font loader (next/font). Each var() carries its own fallback because
+   *  an undefined var() invalidates the whole font-family list (e.g. the dashboard loads no fonts). */
   font: {
-    sans: ['var(--font-sans)', 'var(--font-arabic)', 'system-ui', 'sans-serif'],
-    display: ['var(--font-display)', 'var(--font-arabic)', 'Georgia', 'serif'],
+    sans: ['var(--font-sans, system-ui)', 'var(--font-arabic, system-ui)', 'system-ui', 'sans-serif'],
+    display: ['var(--font-display, Georgia)', 'var(--font-arabic, Georgia)', 'Georgia', 'serif'],
   },
   ease: { luxe: 'cubic-bezier(0.22, 1, 0.36, 1)' },
 } as const;
