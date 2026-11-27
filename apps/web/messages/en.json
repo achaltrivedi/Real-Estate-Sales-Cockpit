@@ -2,7 +2,10 @@
   "common": {
     "sample": "SAMPLE DATA · Fictional project for demonstration only",
     "switchLocale": "العربية",
-    "nav": { "explorer": "Units", "calculator": "Payment plans" }
+    "nav": {
+      "explorer": "Units",
+      "calculator": "Payment plans"
+    }
   },
   "home": {
     "eyebrow": "Project Sales Cockpit",
@@ -35,8 +38,19 @@
       "penthouse": "PH",
       "townhouse": "TH"
     },
-    "view": { "sea": "Sea", "city": "City", "park": "Park", "pool": "Pool", "marina": "Marina" },
-    "availability": { "available": "Available", "reserved": "Reserved", "sold": "Sold", "hold": "On hold" },
+    "view": {
+      "sea": "Sea",
+      "city": "City",
+      "park": "Park",
+      "pool": "Pool",
+      "marina": "Marina"
+    },
+    "availability": {
+      "available": "Available",
+      "reserved": "Reserved",
+      "sold": "Sold",
+      "hold": "On hold"
+    },
     "floor": "Floor",
     "sqft": "sq ft"
   },
@@ -70,9 +84,64 @@
       "plans": "Payment plans",
       "calculate": "Calculate payment plan",
       "enquire": "Enquire about this unit",
-      "enquireSoon": "Chat opens in the next release",
       "close": "Close"
     }
   },
-  "calculator": { "title": "Payment-plan calculator" }
+  "calculator": {
+    "title": "Payment-plan calculator",
+    "subtitle": "See exactly what you pay and when. Sample figures for a fictional project.",
+    "loading": "Loading payment plans…",
+    "error": "Could not load payment plans. Is the API running?",
+    "noUnits": "No available units to calculate.",
+    "unit": "Unit",
+    "plan": "Payment plan",
+    "phase": {
+      "on_booking": "Down payment",
+      "construction": "During construction",
+      "on_handover": "On handover",
+      "post_handover": "Post-handover"
+    },
+    "payments": "{count, plural, one {# payment} other {# payments}}",
+    "milestone": "Milestone",
+    "due": "Due",
+    "amount": "Amount",
+    "price": "Property price",
+    "dld": "DLD registration fee ({pct}%)",
+    "total": "Total cost",
+    "lastPayment": "Final payment due {date}",
+    "enquire": "Enquire about this unit",
+    "disclaimer": "Illustrative only. Dates are counted from today as the booking date. Excludes agency, admin and service fees."
+  },
+  "chat": {
+    "launcher": "Chat with us",
+    "title": "Azure Crest assistant",
+    "statusBot": "Instant replies · sample project",
+    "statusHuman": "A human advisor will reply here shortly",
+    "handoff": "Talk to a human",
+    "close": "Close chat",
+    "intro": "Hi! Ask about units, prices or payment plans. Replies are instant.",
+    "aboutUnit": "About unit {code}",
+    "name": "Your name (optional)",
+    "phone": "WhatsApp number (optional)",
+    "consent": "I agree that Azure Crest (sample) may contact me about this project by chat, WhatsApp or phone. I can opt out at any time.",
+    "start": "Start chat",
+    "starting": "Connecting…",
+    "optOutHint": "Reply STOP at any time to opt out.",
+    "placeholder": "Type a message…",
+    "send": "Send",
+    "profile": "Buyer profile",
+    "pickSlot": "Pick a viewing slot (Dubai time)",
+    "mode": {
+      "in_person": "At the sales gallery",
+      "video_call": "Video call"
+    },
+    "cancel": "Cancel",
+    "confirmViewing": "Book viewing",
+    "viewingBooked": "Viewing booked for {when}. An advisor will confirm shortly.",
+    "error": {
+      "start": "Could not start the chat. Please try again.",
+      "send": "Message not sent. Please try again.",
+      "viewing": "Could not book the viewing. Please try again."
+    }
+  }
 }

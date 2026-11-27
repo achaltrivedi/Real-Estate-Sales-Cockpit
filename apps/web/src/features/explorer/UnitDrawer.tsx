@@ -4,6 +4,7 @@ import type { PaymentPlan, Project, Unit } from '@gsc/contracts';
 import { Pill, formatAed, formatNumber, tokens } from '@gsc/ui';
 import { useLocale, useTranslations } from 'next-intl';
 import { useEffect } from 'react';
+import { useChat } from '@/features/chat-widget';
 import { Link } from '@/i18n/routing';
 import { pricePerSqft } from './filters';
 
@@ -22,6 +23,7 @@ export function UnitDrawer({ unit, project, paymentPlans, onClose }: Props) {
   const plans = paymentPlans.filter((p) => unit.paymentPlanIds.includes(p.id));
   const building = project.buildings.find((b) => b.id === unit.building)?.name ?? unit.building;
   const canEnquire = unit.availability === 'available';
+  const chat = useChat();
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose();
@@ -82,8 +84,15 @@ export function UnitDrawer({ unit, project, paymentPlans, onClose }: Props) {
         <Link href={{ pathname: '/calculator', query: { unit: unit.id } }} className="rounded-pill bg-brand px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-brand-dark">
           {t('calculate')}
         </Link>
-        {/* TODO(Dev A, Phase 2): open the chat widget with this unit pre-selected (createLead.unitId). */}
-        <button type="button" disabled={!canEnquire} className="rounded-pill border border-ink/15 px-5 py-2.5 text-sm disabled:opacity-50" title={t('enquireSoon')}>
+        <button
+          type="button"
+          disabled={!canEnquire}
+          onClick={() => {
+            chat.open({ unitId: unit.id, unitCode: unit.code });
+            onClose();
+          }}
+          className="rounded-pill border border-ink/15 px-5 py-2.5 text-sm hover:border-brand disabled:opacity-50"
+        >
           {canEnquire ? t('enquire') : tu(`availability.${unit.availability}`)}
         </button>
       </div>

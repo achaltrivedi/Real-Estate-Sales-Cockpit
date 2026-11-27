@@ -4,6 +4,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import type { ReactNode } from 'react';
+import { ChatProvider } from '@/features/chat-widget';
 import { Link, routing } from '@/i18n/routing';
 import '../globals.css';
 
@@ -46,8 +47,7 @@ export default async function LocaleLayout({
               </Link>
             </nav>
           </header>
-          {children}
-          {/* TODO(Dev A, Phase 2): <ChatWidget /> from features/chat-widget mounts here */}
+          <ChatProvider>{children}</ChatProvider>
         </NextIntlClientProvider>
       </body>
     </html>
