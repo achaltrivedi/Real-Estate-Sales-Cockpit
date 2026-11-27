@@ -1,27 +1,27 @@
-# One owner per folder (plan §4). Replace the placeholders with real GitHub handles
-# before turning on "Require review from Code Owners" in branch protection for `main`.
+# One owner per folder (plan §4). Dev A = achaltrivedi, Dev B = KrishM-codes.
+# Turn on "Require review from Code Owners" in branch protection for `main`.
 #   DEV_A = Experience lane   DEV_B = Engine lane
 
 # ---- Joint (both approvals required) ----
-*                          @DEV_A_HANDLE @DEV_B_HANDLE
-/packages/contracts/       @DEV_A_HANDLE @DEV_B_HANDLE
-/assets/seed/              @DEV_A_HANDLE @DEV_B_HANDLE
-/packages/config/          @DEV_A_HANDLE @DEV_B_HANDLE
-/docs/                     @DEV_A_HANDLE @DEV_B_HANDLE
-/.github/                  @DEV_A_HANDLE @DEV_B_HANDLE
-/docker-compose.yml        @DEV_A_HANDLE @DEV_B_HANDLE
-/scripts/check-boundaries.mjs @DEV_A_HANDLE @DEV_B_HANDLE
+*                          @achaltrivedi @KrishM-codes
+/packages/contracts/       @achaltrivedi @KrishM-codes
+/assets/seed/              @achaltrivedi @KrishM-codes
+/packages/config/          @achaltrivedi @KrishM-codes
+/docs/                     @achaltrivedi @KrishM-codes
+/.github/                  @achaltrivedi @KrishM-codes
+/docker-compose.yml        @achaltrivedi @KrishM-codes
+/scripts/check-boundaries.mjs @achaltrivedi @KrishM-codes
 
 # ---- Dev A: Experience (what the buyer sees) ----
-/apps/web/                 @DEV_A_HANDLE
-/packages/ui/              @DEV_A_HANDLE
-/packages/3d/              @DEV_A_HANDLE
-/assets/models/            @DEV_A_HANDLE
+/apps/web/                 @achaltrivedi
+/packages/ui/              @achaltrivedi
+/packages/3d/              @achaltrivedi
+/assets/models/            @achaltrivedi
 
 # ---- Dev B: Engine (what happens behind the scenes) ----
-/apps/api/                 @DEV_B_HANDLE
-/apps/dashboard/           @DEV_B_HANDLE
-/packages/qualifier/       @DEV_B_HANDLE
-/packages/messaging/       @DEV_B_HANDLE
-/packages/crm/             @DEV_B_HANDLE
-/packages/db/              @DEV_B_HANDLE
+/apps/api/                 @KrishM-codes
+/apps/dashboard/           @KrishM-codes
+/packages/qualifier/       @KrishM-codes
+/packages/messaging/       @KrishM-codes
+/packages/crm/             @KrishM-codes
+/packages/db/              @KrishM-codes
