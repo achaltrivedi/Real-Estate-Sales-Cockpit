@@ -2,4 +2,38 @@
 @tailwind components;
 @tailwind utilities;
 
-body { @apply bg-sand text-ink antialiased; }
+body { @apply bg-ivory text-ink antialiased; font-feature-settings: 'kern', 'liga'; }
+html[dir='rtl'] body { font-family: var(--font-arabic), var(--font-sans), system-ui, sans-serif; }
+
+@layer components {
+  /** Small caps label used across marketing surfaces. */
+  .eyebrow { @apply text-[11px] font-medium uppercase tracking-luxe; }
+  html[dir='rtl'] .eyebrow { letter-spacing: 0; @apply text-xs; }
+  .btn-luxe {
+    @apply inline-flex items-center gap-3 rounded-pill bg-champagne px-7 py-3.5 text-[12px] font-medium uppercase tracking-[0.22em] text-night transition duration-500 ease-luxe hover:bg-champagne-light;
+  }
+  .btn-ghost-light {
+    @apply inline-flex items-center gap-3 rounded-pill border border-white/40 px-7 py-3.5 text-[12px] font-medium uppercase tracking-[0.22em] text-white backdrop-blur-sm transition duration-500 ease-luxe hover:border-white hover:bg-white/10;
+  }
+  .btn-ghost-dark {
+    @apply inline-flex items-center gap-3 rounded-pill border border-night/25 px-7 py-3.5 text-[12px] font-medium uppercase tracking-[0.22em] text-night transition duration-500 ease-luxe hover:border-night hover:bg-night hover:text-ivory;
+  }
+  html[dir='rtl'] .btn-luxe, html[dir='rtl'] .btn-ghost-light, html[dir='rtl'] .btn-ghost-dark { letter-spacing: 0; @apply text-sm normal-case; }
+}
+
+/** Reveal-on-scroll (toggled by useReveal). */
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity 1.1s cubic-bezier(0.22, 1, 0.36, 1), transform 1.1s cubic-bezier(0.22, 1, 0.36, 1); }
+.reveal.is-in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
+
+/* ---- Cinematic scroll-dive hero ---- */
+/** Shared picture frame: cover-fits the viewport at the renders' aspect, centred. */
+.dive-frame { position: absolute; left: 50%; top: 50%; width: max(100vw, 177.78vh); aspect-ratio: 16 / 9; transform: translate(-50%, -50%); }
+@supports (height: 100svh) { .dive-frame { width: max(100vw, 177.78svh); } }
+@media (max-aspect-ratio: 1/1) {
+  .dive-frame { width: max(100vw, 56.25vh); aspect-ratio: 9 / 16; }
+  @supports (height: 100svh) { .dive-frame { width: max(100vw, 56.25svh); } }
+}
+.dive-layer { position: absolute; inset: 0; display: block; pointer-events: none; will-change: transform, opacity; }
+.dive-layer img { object-fit: cover; }
+@keyframes cue { 0% { transform: translateY(-100%); } 60%, 100% { transform: translateY(300%); } }

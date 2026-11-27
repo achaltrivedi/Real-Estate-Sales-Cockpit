@@ -1,6 +1,9 @@
 'use client';
 
-/** Procedural masterplan ground: plot, podiums, pool deck, park, access road. Replace with glTF when available. */
+/**
+ * Procedural masterplan: the instant placeholder while the glTF streams in, and the
+ * fallback if it fails to load. Kept in the same coordinates as the model.
+ */
 export function Masterplan() {
   return (
     <group>
@@ -15,7 +18,7 @@ export function Masterplan() {
         <meshStandardMaterial color="#9AA3AF" />
       </mesh>
       {/* podiums */}
-      {[-7, 7].map((x) => (
+      {[-8, 8].map((x) => (
         <mesh key={x} position={[x, 1, 0]}>
           <boxGeometry args={[11, 2, 11]} />
           <meshStandardMaterial color="#D8CCB4" />

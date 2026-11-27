@@ -5,6 +5,10 @@ export const tokens = {
     sand: { DEFAULT: '#F6F1E8', deep: '#E9DFCC' },
     brand: { DEFAULT: '#0E7C86', dark: '#095961', light: '#D6F0F2' },
     gold: { DEFAULT: '#C8A55A' },
+    /** Luxury layer (marketing surfaces): deep night, warm ivory, champagne metal. */
+    night: { DEFAULT: '#0B1520', soft: '#14212E', line: '#24323F' },
+    ivory: { DEFAULT: '#F8F5EF', deep: '#EFE8DC' },
+    champagne: { DEFAULT: '#B8976A', light: '#D9C3A0', dark: '#8E7049' },
     availability: {
       available: '#1F9D55',
       reserved: '#D97706',
@@ -22,8 +26,10 @@ export const tokens = {
     },
   },
   radius: { card: '16px', pill: '999px' },
+  /** Families come from CSS variables set by each app's font loader (next/font), with safe fallbacks. */
   font: {
-    sans: ['Inter', 'IBM Plex Sans Arabic', 'system-ui', 'sans-serif'],
-    display: ['"Playfair Display"', 'Georgia', 'serif'],
+    sans: ['var(--font-sans)', 'var(--font-arabic)', 'system-ui', 'sans-serif'],
+    display: ['var(--font-display)', 'var(--font-arabic)', 'Georgia', 'serif'],
   },
+  ease: { luxe: 'cubic-bezier(0.22, 1, 0.36, 1)' },
 } as const;

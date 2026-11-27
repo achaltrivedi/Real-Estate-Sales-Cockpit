@@ -1,8 +1,8 @@
 import { setRequestLocale } from 'next-intl/server';
-import { ShowcaseHero } from '@/features/showcase';
+import { HomeView } from '@/features/showcase';
 
 export default async function Home({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  return <ShowcaseHero />;
+  return <HomeView />;
 }

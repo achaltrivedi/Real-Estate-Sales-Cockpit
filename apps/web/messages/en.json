@@ -5,7 +5,8 @@
     "nav": {
       "explorer": "Units",
       "calculator": "Payment plans"
-    }
+    },
+    "residences": "Residences"
   },
   "home": {
     "eyebrow": "Project Sales Cockpit",
@@ -17,7 +18,17 @@
     "calculator": "Payment plans",
     "tapToExplore": "Pick your unit →",
     "heroFallback": "Interactive 3D is not available on this device. Explore the floor plan instead.",
-    "apiDown": "API not reachable. Run `pnpm dev` from the repo root."
+    "apiDown": "API not reachable. Run `pnpm dev` from the repo root.",
+    "introEyebrow": "The address",
+    "introStatement": "Two sculpted towers on a private lagoon, where every balcony turns towards the light and every evening ends at the water.",
+    "handoverLabel": "Handover",
+    "residencesEyebrow": "Residences",
+    "residencesTitle": "From studios to sky penthouses",
+    "availableCount": "{count, plural, =0 {Fully reserved} one {# available} other {# available}}",
+    "plansEyebrow": "Ownership",
+    "plansTitle": "Plans shaped around you",
+    "plansBody": "Pay most of the price during construction or carry it past handover. See every milestone, date and fee before you commit.",
+    "planMilestones": "{count, plural, one {# milestone} other {# milestones}}"
   },
   "units": {
     "type": {
@@ -143,5 +154,38 @@
       "send": "Message not sent. Please try again.",
       "viewing": "Could not book the viewing. Please try again."
     }
+  },
+  "hero": {
+    "aria": "Azure Crest: a scroll journey from the lagoon to the sky terrace",
+    "eyebrow": "Sample Waterfront District",
+    "title": "Azure Crest",
+    "subtitle": "Residences",
+    "scroll": "Scroll to arrive",
+    "outroEyebrow": "The sky terrace · Tower 1",
+    "outro": "Life, above the shoreline.",
+    "ctaExplore": "Explore residences",
+    "cta3d": "View in 3D"
+  },
+  "experience": {
+    "eyebrow": "In three dimensions",
+    "title": "Walk the towers before they rise",
+    "body": "Orbit the masterplan, switch to live availability and pick any residence floor by floor.",
+    "modeArchitecture": "Architecture",
+    "modeAvailability": "Availability",
+    "fullscreen": "Full screen",
+    "close": "Close",
+    "details": "Residence details",
+    "plan": "Payment plan",
+    "hint": "Drag to orbit · scroll or pinch to zoom · tap a residence",
+    "unsupported": "Interactive 3D is not available on this device."
+  },
+  "footer": {
+    "tagline": "A fictional waterfront address, created to demonstrate the Genesis sales cockpit.",
+    "explore": "Explore",
+    "residences": "Residences",
+    "plans": "Payment plans",
+    "gallery": "Sales gallery",
+    "galleryHours": "Daily 10:00–21:00 · by appointment",
+    "disclaimer": "SAMPLE DATA. Fictional project for demonstration only. Not an offer; no real units, prices or permits. Renders are illustrative."
   }
 }

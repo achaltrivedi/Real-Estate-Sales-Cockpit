@@ -1,1 +1,2 @@
-export { ShowcaseHero } from './ShowcaseHero';
+export { HomeView } from './HomeView';
+export { CinematicHero } from './CinematicHero';

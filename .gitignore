@@ -13,3 +13,7 @@ coverage
 .claude/
 next-env.d.ts
 *.tsbuildinfo
+
+# Blender preview renders (regenerate with assets/models/source/build_tower.py --preview)
+assets/models/previews/
+__pycache__/
