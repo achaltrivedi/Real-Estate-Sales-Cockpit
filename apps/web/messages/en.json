@@ -1,14 +1,78 @@
 {
   "common": {
     "sample": "SAMPLE DATA · Fictional project for demonstration only",
-    "switchLocale": "العربية"
+    "switchLocale": "العربية",
+    "nav": { "explorer": "Units", "calculator": "Payment plans" }
   },
   "home": {
     "eyebrow": "Project Sales Cockpit",
+    "handover": "Handover {date}",
+    "from": "From",
+    "available": "Available",
+    "types": "Unit types",
     "cta": "Explore units",
     "calculator": "Payment plans",
+    "tapToExplore": "Pick your unit →",
+    "heroFallback": "Interactive 3D is not available on this device. Explore the floor plan instead.",
     "apiDown": "API not reachable. Run `pnpm dev` from the repo root."
   },
-  "explorer": { "title": "Unit explorer", "loading": "Loading units…", "units": "units" },
+  "units": {
+    "type": {
+      "studio": "Studio",
+      "1br": "1 Bedroom",
+      "2br": "2 Bedrooms",
+      "3br": "3 Bedrooms",
+      "4br": "4 Bedrooms",
+      "penthouse": "Penthouse",
+      "townhouse": "Townhouse"
+    },
+    "typeShort": {
+      "studio": "Studio",
+      "1br": "1BR",
+      "2br": "2BR",
+      "3br": "3BR",
+      "4br": "4BR",
+      "penthouse": "PH",
+      "townhouse": "TH"
+    },
+    "view": { "sea": "Sea", "city": "City", "park": "Park", "pool": "Pool", "marina": "Marina" },
+    "availability": { "available": "Available", "reserved": "Reserved", "sold": "Sold", "hold": "On hold" },
+    "floor": "Floor",
+    "sqft": "sq ft"
+  },
+  "explorer": {
+    "title": "Unit explorer",
+    "loading": "Loading units…",
+    "error": "Could not load units. Is the API running?",
+    "results": "{count} of {total} units",
+    "noResults": "No units match these filters.",
+    "view3d": "3D",
+    "viewPlan": "Floor plan",
+    "no3d": "3D is not supported on this device, showing the floor plan.",
+    "filters": {
+      "label": "Filters",
+      "type": "Type",
+      "view": "View",
+      "building": "Building",
+      "allBuildings": "All buildings",
+      "maxPrice": "Max price",
+      "minFloor": "From floor",
+      "availableOnly": "Available only",
+      "reset": "Reset filters"
+    },
+    "detail": {
+      "unit": "Unit",
+      "building": "Building",
+      "view": "View",
+      "area": "Area",
+      "bedsBaths": "Beds / baths",
+      "perSqft": "Price per sq ft",
+      "plans": "Payment plans",
+      "calculate": "Calculate payment plan",
+      "enquire": "Enquire about this unit",
+      "enquireSoon": "Chat opens in the next release",
+      "close": "Close"
+    }
+  },
   "calculator": { "title": "Payment-plan calculator" }
 }
