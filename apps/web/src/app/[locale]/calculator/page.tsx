@@ -1,14 +1,14 @@
-import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { setRequestLocale } from 'next-intl/server';
+import { CalculatorView } from '@/features/calculator';
 
-export default async function CalculatorPage({ params }: { params: Promise<{ locale: string }> }) {
-  const { locale } = await params;
+export default async function CalculatorPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ locale: string }>;
+  searchParams: Promise<{ unit?: string }>;
+}) {
+  const [{ locale }, { unit }] = await Promise.all([params, searchParams]);
   setRequestLocale(locale);
-  const t = await getTranslations('calculator');
-  return (
-    <main className="mx-auto max-w-6xl px-4 py-8">
-      <h1 className="font-display text-3xl">{t('title')}</h1>
-      {/* TODO(Dev A, Phase 2): features/calculator — down payment, instalments, handover, post-handover, DLD fee.
-          Data: api('getProject') → paymentPlans (milestones sum to 100%, enforced by the contract). */}
-    </main>
-  );
+  return <CalculatorView initialUnitId={unit} />;
 }

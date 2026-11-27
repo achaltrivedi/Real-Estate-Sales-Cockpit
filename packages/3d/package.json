@@ -3,20 +3,29 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "exports": { ".": "./src/index.ts" },
-  "scripts": { "typecheck": "tsc -p tsconfig.json" },
+  "exports": {
+    ".": "./src/index.ts",
+    "./capability": "./src/capability.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "vitest run"
+  },
   "dependencies": {
     "@gsc/contracts": "workspace:*",
     "@react-three/drei": "^10.0.0",
     "@react-three/fiber": "^9.0.0",
     "three": "^0.171.0"
   },
-  "peerDependencies": { "react": "^19.0.0" },
+  "peerDependencies": {
+    "react": "^19.0.0"
+  },
   "devDependencies": {
     "@gsc/config": "workspace:*",
     "@types/react": "19.0.2",
     "@types/three": "^0.171.0",
     "react": "19.0.0",
-    "typescript": "5.7.2"
+    "typescript": "5.7.2",
+    "vitest": "2.1.8"
   }
 }

@@ -2,6 +2,7 @@
 // Change this table only with both developers' agreement (it is the architecture).
 import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const ALLOWED = {
   '@gsc/config': [],
@@ -19,7 +20,7 @@ const ALLOWED = {
   '@gsc/dashboard': ['@gsc/config', '@gsc/contracts', '@gsc/ui'],
 };
 
-const root = new URL('..', import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1');
+const root = fileURLToPath(new URL('..', import.meta.url));
 let failed = false;
 for (const group of ['apps', 'packages']) {
   for (const dir of readdirSync(join(root, group))) {

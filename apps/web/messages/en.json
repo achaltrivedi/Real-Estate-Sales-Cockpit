@@ -1,14 +1,147 @@
 {
   "common": {
     "sample": "SAMPLE DATA · Fictional project for demonstration only",
-    "switchLocale": "العربية"
+    "switchLocale": "العربية",
+    "nav": {
+      "explorer": "Units",
+      "calculator": "Payment plans"
+    }
   },
   "home": {
     "eyebrow": "Project Sales Cockpit",
+    "handover": "Handover {date}",
+    "from": "From",
+    "available": "Available",
+    "types": "Unit types",
     "cta": "Explore units",
     "calculator": "Payment plans",
+    "tapToExplore": "Pick your unit →",
+    "heroFallback": "Interactive 3D is not available on this device. Explore the floor plan instead.",
     "apiDown": "API not reachable. Run `pnpm dev` from the repo root."
   },
-  "explorer": { "title": "Unit explorer", "loading": "Loading units…", "units": "units" },
-  "calculator": { "title": "Payment-plan calculator" }
+  "units": {
+    "type": {
+      "studio": "Studio",
+      "1br": "1 Bedroom",
+      "2br": "2 Bedrooms",
+      "3br": "3 Bedrooms",
+      "4br": "4 Bedrooms",
+      "penthouse": "Penthouse",
+      "townhouse": "Townhouse"
+    },
+    "typeShort": {
+      "studio": "Studio",
+      "1br": "1BR",
+      "2br": "2BR",
+      "3br": "3BR",
+      "4br": "4BR",
+      "penthouse": "PH",
+      "townhouse": "TH"
+    },
+    "view": {
+      "sea": "Sea",
+      "city": "City",
+      "park": "Park",
+      "pool": "Pool",
+      "marina": "Marina"
+    },
+    "availability": {
+      "available": "Available",
+      "reserved": "Reserved",
+      "sold": "Sold",
+      "hold": "On hold"
+    },
+    "floor": "Floor",
+    "sqft": "sq ft"
+  },
+  "explorer": {
+    "title": "Unit explorer",
+    "loading": "Loading units…",
+    "error": "Could not load units. Is the API running?",
+    "results": "{count} of {total} units",
+    "noResults": "No units match these filters.",
+    "view3d": "3D",
+    "viewPlan": "Floor plan",
+    "no3d": "3D is not supported on this device, showing the floor plan.",
+    "filters": {
+      "label": "Filters",
+      "type": "Type",
+      "view": "View",
+      "building": "Building",
+      "allBuildings": "All buildings",
+      "maxPrice": "Max price",
+      "minFloor": "From floor",
+      "availableOnly": "Available only",
+      "reset": "Reset filters"
+    },
+    "detail": {
+      "unit": "Unit",
+      "building": "Building",
+      "view": "View",
+      "area": "Area",
+      "bedsBaths": "Beds / baths",
+      "perSqft": "Price per sq ft",
+      "plans": "Payment plans",
+      "calculate": "Calculate payment plan",
+      "enquire": "Enquire about this unit",
+      "close": "Close"
+    }
+  },
+  "calculator": {
+    "title": "Payment-plan calculator",
+    "subtitle": "See exactly what you pay and when. Sample figures for a fictional project.",
+    "loading": "Loading payment plans…",
+    "error": "Could not load payment plans. Is the API running?",
+    "noUnits": "No available units to calculate.",
+    "unit": "Unit",
+    "plan": "Payment plan",
+    "phase": {
+      "on_booking": "Down payment",
+      "construction": "During construction",
+      "on_handover": "On handover",
+      "post_handover": "Post-handover"
+    },
+    "payments": "{count, plural, one {# payment} other {# payments}}",
+    "milestone": "Milestone",
+    "due": "Due",
+    "amount": "Amount",
+    "price": "Property price",
+    "dld": "DLD registration fee ({pct}%)",
+    "total": "Total cost",
+    "lastPayment": "Final payment due {date}",
+    "enquire": "Enquire about this unit",
+    "disclaimer": "Illustrative only. Dates are counted from today as the booking date. Excludes agency, admin and service fees."
+  },
+  "chat": {
+    "launcher": "Chat with us",
+    "title": "Azure Crest assistant",
+    "statusBot": "Instant replies · sample project",
+    "statusHuman": "A human advisor will reply here shortly",
+    "handoff": "Talk to a human",
+    "close": "Close chat",
+    "intro": "Hi! Ask about units, prices or payment plans. Replies are instant.",
+    "aboutUnit": "About unit {code}",
+    "name": "Your name (optional)",
+    "phone": "WhatsApp number (optional)",
+    "consent": "I agree that Azure Crest (sample) may contact me about this project by chat, WhatsApp or phone. I can opt out at any time.",
+    "start": "Start chat",
+    "starting": "Connecting…",
+    "optOutHint": "Reply STOP at any time to opt out.",
+    "placeholder": "Type a message…",
+    "send": "Send",
+    "profile": "Buyer profile",
+    "pickSlot": "Pick a viewing slot (Dubai time)",
+    "mode": {
+      "in_person": "At the sales gallery",
+      "video_call": "Video call"
+    },
+    "cancel": "Cancel",
+    "confirmViewing": "Book viewing",
+    "viewingBooked": "Viewing booked for {when}. An advisor will confirm shortly.",
+    "error": {
+      "start": "Could not start the chat. Please try again.",
+      "send": "Message not sent. Please try again.",
+      "viewing": "Could not book the viewing. Please try again."
+    }
+  }
 }

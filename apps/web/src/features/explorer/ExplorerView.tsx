@@ -1,46 +1,56 @@
 'use client';
 
 import type { Unit } from '@gsc/contracts';
-import { formatAed } from '@gsc/ui';
+import { formatNumber } from '@gsc/ui';
 import { useLocale, useTranslations } from 'next-intl';
-import dynamic from 'next/dynamic';
-import { useEffect, useState } from 'react';
-import { PROJECT_ID, api } from '@/lib/api';
+import { useCallback, useMemo, useState } from 'react';
+import { useInventory } from '@/lib/use-inventory';
+import { AvailabilityLegend } from './AvailabilityLegend';
+import { FilterBar } from './FilterBar';
+import { EMPTY_FILTERS, filterUnits, inventoryStats, isFiltered, type UnitFilters } from './filters';
+import { UnitDrawer } from './UnitDrawer';
+import { UnitList } from './UnitList';
+import { UnitViewer } from './UnitViewer';
 
-const TowerScene = dynamic(() => import('@gsc/3d').then((m) => m.TowerScene), { ssr: false });
-
-/** Phase 0 skeleton. TODO(Dev A, Phase 1): filters (type/price/floor/view), unit detail drawer, mobile fallback. */
 export function ExplorerView() {
   const t = useTranslations('explorer');
   const locale = useLocale();
-  const [units, setUnits] = useState<Unit[] | null>(null);
+  const inv = useInventory();
+  const [filters, setFilters] = useState<UnitFilters>(EMPTY_FILTERS);
   const [selected, setSelected] = useState<Unit | null>(null);
+  const close = useCallback(() => setSelected(null), []);
 
-  useEffect(() => {
-    api('listUnits', { params: { id: PROJECT_ID } }).then((r) => setUnits(r.units));
-  }, []);
+  const units = inv.status === 'ready' ? inv.data.units : [];
+  const stats = useMemo(() => inventoryStats(units), [units]);
+  const results = useMemo(() => filterUnits(units, filters), [units, filters]);
+  const highlightIds = useMemo(() => (isFiltered(filters) ? new Set(results.map((u) => u.id)) : undefined), [filters, results]);
 
-  if (!units) return <p className="p-8">{t('loading')}</p>;
+  if (inv.status === 'loading') return <p className="mx-auto max-w-7xl p-8">{t('loading')}</p>;
+  if (inv.status === 'error') return <p className="mx-auto max-w-7xl p-8">{t('error')}</p>;
+  const { project, paymentPlans } = inv.data;
 
   return (
-    <main className="mx-auto grid max-w-6xl gap-6 px-4 py-8 md:grid-cols-[2fr_1fr]">
-      <TowerScene units={units} selectedUnitId={selected?.id} onSelect={setSelected} className="h-[520px] rounded-card bg-white" />
-      <aside>
-        <h1 className="font-display text-3xl">{t('title')}</h1>
-        <p className="text-sm text-ink-muted">
-          {units.length} {t('units')}
-        </p>
-        {selected && (
-          <div className="mt-6 rounded-card bg-white p-5">
-            <p className="text-lg font-semibold">{selected.code}</p>
-            <p className="text-sm text-ink-soft">
-              {selected.type} · {selected.view} · {selected.areaSqft} sqft
-            </p>
-            <p className="mt-2 text-xl">{formatAed(selected.priceAed, locale)}</p>
-            <p className="text-xs uppercase text-ink-muted">{selected.availability}</p>
-          </div>
-        )}
-      </aside>
+    <main className="mx-auto max-w-7xl space-y-4 px-4 pb-16 pt-4">
+      <div className="flex flex-wrap items-end justify-between gap-2">
+        <div>
+          <h1 className="font-display text-3xl md:text-4xl">{t('title')}</h1>
+          <p className="text-sm text-ink-muted">
+            {t('results', { count: formatNumber(results.length, locale), total: formatNumber(stats.total, locale) })}
+          </p>
+        </div>
+        <AvailabilityLegend counts={stats.byAvailability} />
+      </div>
+
+      <FilterBar value={filters} onChange={setFilters} stats={stats} project={project} />
+
+      <div className="grid gap-4 lg:grid-cols-[1fr_360px]">
+        <UnitViewer units={units} buildings={project.buildings} highlightIds={highlightIds} selectedUnitId={selected?.id} onSelect={setSelected} />
+        <div className="lg:max-h-[560px] lg:overflow-y-auto lg:pe-1">
+          <UnitList units={results} selectedUnitId={selected?.id} onSelect={setSelected} />
+        </div>
+      </div>
+
+      {selected && <UnitDrawer unit={selected} project={project} paymentPlans={paymentPlans} onClose={close} />}
     </main>
   );
 }

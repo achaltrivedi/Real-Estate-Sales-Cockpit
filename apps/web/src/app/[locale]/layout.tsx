@@ -4,6 +4,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import type { ReactNode } from 'react';
+import { ChatProvider } from '@/features/chat-widget';
 import { Link, routing } from '@/i18n/routing';
 import '../globals.css';
 
@@ -34,12 +35,19 @@ export default async function LocaleLayout({
             <Link href="/" className="font-display text-xl">
               Azure Crest
             </Link>
-            <Link href="/" locale={other} className="text-sm text-ink-soft underline">
-              {t('switchLocale')}
-            </Link>
+            <nav className="flex items-center gap-4 text-sm">
+              <Link href="/explorer" className="hover:text-brand">
+                {t('nav.explorer')}
+              </Link>
+              <Link href="/calculator" className="hover:text-brand">
+                {t('nav.calculator')}
+              </Link>
+              <Link href="/" locale={other} className="rounded-pill border border-ink/15 px-3 py-1 text-ink-soft">
+                {t('switchLocale')}
+              </Link>
+            </nav>
           </header>
-          {children}
-          {/* TODO(Dev A, Phase 2): <ChatWidget /> from features/chat-widget mounts here */}
+          <ChatProvider>{children}</ChatProvider>
         </NextIntlClientProvider>
       </body>
     </html>
