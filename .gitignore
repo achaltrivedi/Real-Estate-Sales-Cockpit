@@ -12,3 +12,4 @@ coverage
 # local tool config
 .claude/
 next-env.d.ts
+*.tsbuildinfo
