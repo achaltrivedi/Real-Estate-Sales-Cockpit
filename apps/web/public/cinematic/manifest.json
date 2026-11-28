@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "sun": {
+    "elevation": 3.2
+  },
+  "orientations": {
+    "landscape": {
+      "width": 2560,
+      "height": 1440,
+      "A": [
+        "A-bg.webp",
+        "A-towers.webp",
+        "A-mid.webp",
+        "A-fg.webp"
+      ],
+      "C": [
+        "C-view.webp",
+        "C-terrace.webp"
+      ],
+      "crown": [
+        0.5285,
+        0.1442,
+        0.6685,
+        0.2705
+      ]
+    },
+    "portrait": {
+      "width": 1080,
+      "height": 1920,
+      "A": [
+        "A-bg.webp",
+        "A-towers.webp",
+        "A-mid.webp",
+        "A-fg.webp"
+      ],
+      "C": [
+        "C-view.webp",
+        "C-terrace.webp"
+      ],
+      "crown": [
+        0.5506,
+        0.2998,
+        0.7995,
+        0.3709
+      ]
+    }
+  }
+}

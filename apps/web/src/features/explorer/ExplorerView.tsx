@@ -1,9 +1,9 @@
 'use client';
 
-import type { Unit } from '@gsc/contracts';
+import { UnitType, type Unit } from '@gsc/contracts';
 import { formatNumber } from '@gsc/ui';
 import { useLocale, useTranslations } from 'next-intl';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useInventory } from '@/lib/use-inventory';
 import { AvailabilityLegend } from './AvailabilityLegend';
 import { FilterBar } from './FilterBar';
@@ -24,6 +24,18 @@ export function ExplorerView() {
   const stats = useMemo(() => inventoryStats(units), [units]);
   const results = useMemo(() => filterUnits(units, filters), [units, filters]);
   const highlightIds = useMemo(() => (isFiltered(filters) ? new Set(results.map((u) => u.id)) : undefined), [filters, results]);
+
+  // Deep links from the home page / 3D viewer: ?type=2br pre-filters, ?unit=<id> opens that residence.
+  const deepLinked = useRef(false);
+  useEffect(() => {
+    if (deepLinked.current || units.length === 0) return;
+    deepLinked.current = true;
+    const q = new URLSearchParams(window.location.search);
+    const type = q.get('type');
+    if (type && (UnitType.options as string[]).includes(type)) setFilters({ ...EMPTY_FILTERS, types: [type as Unit['type']] });
+    const unit = units.find((u) => u.id === q.get('unit'));
+    if (unit) setSelected(unit);
+  }, [units]);
 
   if (inv.status === 'loading') return <p className="mx-auto max-w-7xl p-8">{t('loading')}</p>;
   if (inv.status === 'error') return <p className="mx-auto max-w-7xl p-8">{t('error')}</p>;

@@ -5,7 +5,8 @@
     "nav": {
       "explorer": "Units",
       "calculator": "Payment plans"
-    }
+    },
+    "residences": "Residences"
   },
   "home": {
     "eyebrow": "Project Sales Cockpit",
@@ -17,7 +18,22 @@
     "calculator": "Payment plans",
     "tapToExplore": "Pick your unit →",
     "heroFallback": "Interactive 3D is not available on this device. Explore the floor plan instead.",
-    "apiDown": "API not reachable. Run `pnpm dev` from the repo root."
+    "apiDown": "API not reachable. Run `pnpm dev` from the repo root.",
+    "introEyebrow": "The address",
+    "introStatement": "Two sculpted towers on a private lagoon, where every balcony turns towards the light and every evening ends at the water.",
+    "handoverLabel": "Handover",
+    "residencesEyebrow": "Residences",
+    "residencesTitle": "From studios to sky penthouses",
+    "availableCount": "{count, plural, =0 {Fully reserved} one {# available} other {# available}}",
+    "plansEyebrow": "Ownership",
+    "plansTitle": "Plans shaped around you",
+    "plansBody": "Pay most of the price during construction or carry it past handover. See every milestone, date and fee before you commit.",
+    "planMilestones": "{count, plural, one {# milestone} other {# milestones}}",
+    "amenitiesEyebrow": "Amenities",
+    "amenitiesTitle": "A resort, kept private",
+    "amenitiesBody": "Seven floors of shared life between the lagoon and the sky, reserved for residents and their guests.",
+    "arrivalCaption": "The arrival court, under a cantilevered bronze canopy",
+    "facadeCaption": "Travertine, bronze and glass, shaped into the towers’ flowing balconies"
   },
   "units": {
     "type": {
@@ -142,6 +158,150 @@
       "start": "Could not start the chat. Please try again.",
       "send": "Message not sent. Please try again.",
       "viewing": "Could not book the viewing. Please try again."
+    }
+  },
+  "hero": {
+    "aria": "Azure Crest: a scroll journey from the lagoon to the sky terrace",
+    "eyebrow": "Sample Waterfront District",
+    "title": "Azure Crest",
+    "subtitle": "Residences",
+    "scroll": "Scroll to arrive",
+    "outroEyebrow": "The sky terrace · Tower 1",
+    "outro": "Life, above the shoreline.",
+    "ctaExplore": "Explore residences",
+    "cta3d": "View in 3D"
+  },
+  "experience": {
+    "eyebrow": "In three dimensions",
+    "title": "Walk the towers before they rise",
+    "body": "Orbit the masterplan, switch to live availability and pick any residence floor by floor.",
+    "modeArchitecture": "Architecture",
+    "modeAvailability": "Availability",
+    "fullscreen": "Full screen",
+    "close": "Close",
+    "details": "Residence details",
+    "plan": "Payment plan",
+    "hint": "Drag to orbit · scroll or pinch to zoom · tap a residence",
+    "unsupported": "Interactive 3D is not available on this device."
+  },
+  "footer": {
+    "tagline": "A fictional waterfront address, created to demonstrate the Genesis sales cockpit.",
+    "explore": "Explore",
+    "residences": "Residences",
+    "plans": "Payment plans",
+    "gallery": "Sales gallery",
+    "galleryHours": "Daily 10:00–21:00 · by appointment",
+    "disclaimer": "SAMPLE DATA. Fictional project for demonstration only. Not an offer; no real units, prices or permits. Renders are illustrative."
+  },
+  "residence": {
+    "eyebrow": "The residence",
+    "interiors": "Interiors",
+    "floorPlan": "Floor plan",
+    "openPlan": "Floor plan & interiors",
+    "openGallery": "View gallery",
+    "stepInside": "Step inside",
+    "explore": "View available residences",
+    "plan": "Payment plan",
+    "close": "Close",
+    "prev": "Previous",
+    "next": "Next",
+    "area": "Area",
+    "beds": "Bedrooms",
+    "baths": "Bathrooms",
+    "view": "View",
+    "entry": "Entry",
+    "viewSide": "{view} view",
+    "planAria": "Floor plan",
+    "disclaimer": "Illustrative plan and interiors for this fictional project. Layouts, dimensions and finishes are indicative only.",
+    "room": {
+      "living": "Living",
+      "livingDining": "Living & dining",
+      "studio": "Living & sleeping",
+      "kitchen": "Kitchen",
+      "master": "Principal suite",
+      "bedroom": "Bedroom",
+      "ensuite": "Ensuite",
+      "bath": "Bath",
+      "powder": "Powder",
+      "walkin": "Walk-in",
+      "wardrobe": "Robe",
+      "store": "Store",
+      "laundry": "Laundry",
+      "foyer": "Entry",
+      "corridor": "Hall",
+      "balcony": "Balcony",
+      "terrace": "Terrace & pool"
+    },
+    "photo": {
+      "studio-living": "Studio: living and sleeping in one light-filled room",
+      "1br-living": "One bedroom: living room opening onto the balcony",
+      "1br-bedroom": "One bedroom: bedroom with lagoon views",
+      "2br-living-dining": "Two bedrooms: open living and dining",
+      "2br-master": "Principal suite with floor-to-ceiling glass",
+      "3br-family-living": "Three bedrooms: family living room",
+      "3br-kitchen": "Kitchen in stone and oak with an island",
+      "penthouse-living": "Penthouse: double-height living room",
+      "penthouse-terrace": "Penthouse: terrace with a private pool",
+      "bathroom": "Bathroom in travertine with a freestanding bath",
+      "lobby": "Lobby",
+      "podium-pool": "Podium pool",
+      "sky-lounge": "Sky lounge",
+      "spa": "Spa",
+      "gym": "Fitness studio",
+      "promenade": "Lagoon promenade",
+      "kids-club": "Kids’ club"
+    },
+    "amenity": {
+      "lobby": {
+        "title": "The lobby",
+        "body": "A double-height hall in travertine and bronze, with a concierge on hand day and night."
+      },
+      "podium-pool": {
+        "title": "Podium pool",
+        "body": "A 40-metre infinity edge facing the lagoon, with shaded cabanas and a pool bar."
+      },
+      "sky-lounge": {
+        "title": "Sky lounge",
+        "body": "A residents’ lounge on the top floor, for sunsets, quiet work and private dinners."
+      },
+      "spa": {
+        "title": "Spa",
+        "body": "Treatment rooms, a hammam, sauna and cold plunge, with relaxation lounges."
+      },
+      "gym": {
+        "title": "Fitness studio",
+        "body": "Strength, cardio and a studio for classes, looking out over the water."
+      },
+      "promenade": {
+        "title": "Lagoon promenade",
+        "body": "A palm-lined boardwalk along the beach, the marina and waterfront cafés."
+      },
+      "kids-club": {
+        "title": "Kids’ club",
+        "body": "Supervised play, a splash pad and a shaded garden, steps from home."
+      }
+    },
+    "tour": {
+      "title": "360° tour",
+      "open": "Take the 360° tour",
+      "loading": "Preparing the view",
+      "hint": "Drag to look around",
+      "rooms": "Rooms",
+      "view": "Sea side",
+      "planGallery": "Floor plan & gallery",
+      "disclaimer": "Rendered views of a representative residence of this type. Furniture and finishes are indicative.",
+      "amenityDisclaimer": "Rendered views. Final design, furniture and finishes may vary.",
+      "stop": {
+        "arrival": "Arrival",
+        "lounge": "Lounge",
+        "bar": "Bar",
+        "pool": "Vitality pool",
+        "relax": "Relaxation",
+        "studio": "Studio",
+        "deck": "Pool deck",
+        "boardwalk": "Boardwalk"
+      },
+      "unavailable": "This view could not be loaded. Please try again."
     }
   }
 }
