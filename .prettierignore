@@ -2,3 +2,4 @@ pnpm-lock.yaml
 .next
 dist
 assets/models
+packages/db/migrations

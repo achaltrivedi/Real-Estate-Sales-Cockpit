@@ -22,13 +22,17 @@ export class MockCrm implements CrmAdapter {
 
 export class WebhookCrm implements CrmAdapter {
   readonly name = 'webhook' as const;
-  constructor(private url: string) {}
+  constructor(
+    private url: string,
+    private timeoutMs = 5000,
+  ) {}
 
   private async post(body: unknown) {
     const res = await fetch(this.url, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify(body),
+      signal: AbortSignal.timeout(this.timeoutMs), // a hung CRM must not pile up requests
     });
     if (!res.ok) throw new Error(`CRM webhook failed: ${res.status}`);
   }
@@ -41,6 +45,7 @@ export class WebhookCrm implements CrmAdapter {
 }
 
 export function createCrm(env: Record<string, string | undefined>): CrmAdapter {
-  if (env.CRM_ADAPTER === 'webhook' && env.CRM_WEBHOOK_URL) return new WebhookCrm(env.CRM_WEBHOOK_URL);
+  if (env.CRM_ADAPTER === 'webhook' && env.CRM_WEBHOOK_URL)
+    return new WebhookCrm(env.CRM_WEBHOOK_URL);
   return new MockCrm();
 }

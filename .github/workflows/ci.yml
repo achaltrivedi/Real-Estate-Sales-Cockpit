@@ -25,6 +25,15 @@ jobs:
         run: pnpm check:boundaries
       - name: OpenAPI is up to date with contracts
         run: pnpm openapi && git diff --exit-code packages/contracts/openapi.json
+      - name: DB migrations are up to date with schema
+        timeout-minutes: 3
+        run: |
+          pnpm --filter @gsc/db generate
+          if [ -n "$(git status --porcelain packages/db/migrations)" ]; then
+            echo "::error::packages/db/src/schema.ts changed without a migration. Run 'pnpm --filter @gsc/db generate' and commit it."
+            git status --porcelain packages/db/migrations
+            exit 1
+          fi
       - run: pnpm typecheck
       - run: pnpm test
       - run: pnpm build

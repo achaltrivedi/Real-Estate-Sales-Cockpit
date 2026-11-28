@@ -14,6 +14,17 @@ pnpm dev                   # web :3000 · dashboard :3001 · api :4000
 No Docker needed: the API defaults to an in-memory store seeded from `assets/seed/project.json` and mock LLM / WhatsApp / CRM.
 Optional infra: `pnpm db:up` (Postgres + Redis).
 
+### Postgres mode (optional)
+
+```bash
+pnpm db:up                          # Postgres + Redis (docker compose)
+pnpm --filter @gsc/db migrate       # apply packages/db/migrations
+pnpm --filter @gsc/db seed          # upsert the fictional project (safe to re-run)
+# then in .env: DATA_DRIVER=postgres
+```
+
+Postgres tests run in-process on PGlite, so `pnpm test` never needs Docker.
+
 | Command | What |
 |---|---|
 | `pnpm dev:a` | web + api (Dev A loop) |

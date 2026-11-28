@@ -232,6 +232,9 @@ importers:
       typescript:
         specifier: 5.7.2
         version: 5.7.2
+      vitest:
+        specifier: 2.1.8
+        version: 2.1.8(@types/node@22.10.2)
 
   packages/db:
     dependencies:
@@ -240,11 +243,14 @@ importers:
         version: link:../contracts
       drizzle-orm:
         specifier: 0.38.3
-        version: 0.38.3(@types/react@19.0.2)(postgres@3.4.5)(react@19.0.0)
+        version: 0.38.3(@electric-sql/pglite@0.2.17)(@types/react@19.0.2)(postgres@3.4.5)(react@19.0.0)
       postgres:
         specifier: 3.4.5
         version: 3.4.5
     devDependencies:
+      '@electric-sql/pglite':
+        specifier: 0.2.17
+        version: 0.2.17
       '@gsc/config':
         specifier: workspace:*
         version: link:../config
@@ -260,6 +266,9 @@ importers:
       typescript:
         specifier: 5.7.2
         version: 5.7.2
+      vitest:
+        specifier: 2.1.8
+        version: 2.1.8(@types/node@22.10.2)
 
   packages/messaging:
     dependencies:
@@ -276,6 +285,9 @@ importers:
       typescript:
         specifier: 5.7.2
         version: 5.7.2
+      vitest:
+        specifier: 2.1.8
+        version: 2.1.8(@types/node@22.10.2)
 
   packages/qualifier:
     dependencies:
@@ -328,6 +340,9 @@ packages:
 
   '@drizzle-team/brocli@0.10.2':
     resolution: {integrity: sha512-z33Il7l5dKjUgGULTqBsQBQwckHh5AbIuxhdsIxDDiZAzBOrZO6q9ogcWC65kU382AfynTfgNumVcNIjuIua6w==}
+
+  '@electric-sql/pglite@0.2.17':
+    resolution: {integrity: sha512-qEpKRT2oUaWDH6tjRxLHjdzMqRUGYDnGZlKrnL4dJ77JVMcP2Hpo3NYnOSPKdZdeec57B6QPprCUFg0picx5Pw==}
 
   '@emnapi/runtime@1.11.3':
     resolution: {integrity: sha512-Xz4Tpyki7XyrpbUK1jR1AhdAdaXyhhY4lZ3neLodmhpuWfy2PAQN5B46sAiU4liOXGLkHypn/qU+jvfWSCYYLA==}
@@ -2526,6 +2541,8 @@ snapshots:
 
   '@drizzle-team/brocli@0.10.2': {}
 
+  '@electric-sql/pglite@0.2.17': {}
+
   '@emnapi/runtime@1.11.3':
     dependencies:
       tslib: 2.9.1
@@ -3411,8 +3428,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.38.3(@types/react@19.0.2)(postgres@3.4.5)(react@19.0.0):
+  drizzle-orm@0.38.3(@electric-sql/pglite@0.2.17)(@types/react@19.0.2)(postgres@3.4.5)(react@19.0.0):
     optionalDependencies:
+      '@electric-sql/pglite': 0.2.17
       '@types/react': 19.0.2
       postgres: 3.4.5
       react: 19.0.0
