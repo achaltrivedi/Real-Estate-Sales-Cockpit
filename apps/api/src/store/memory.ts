@@ -70,6 +70,12 @@ export class MemoryStore implements Store {
     const l = this.leads.get(id);
     return l ? copy(l) : null;
   }
+  async findLeadByPhone(phone: string) {
+    const l = [...this.leads.values()]
+      .filter((x) => x.phone === phone)
+      .sort((a, b) => b.createdAt.localeCompare(a.createdAt))[0];
+    return l ? copy(l) : null;
+  }
   async listLeads(f: LeadFilter) {
     return copy(
       [...this.leads.values()]

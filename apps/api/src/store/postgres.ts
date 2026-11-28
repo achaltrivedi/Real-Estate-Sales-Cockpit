@@ -199,6 +199,16 @@ export class PostgresStore implements Store {
     return r ? rowToLead(r) : null;
   }
 
+  async findLeadByPhone(phone: string) {
+    const [r] = await this.db
+      .select()
+      .from(schema.leads)
+      .where(eq(schema.leads.phone, phone))
+      .orderBy(desc(schema.leads.createdAt))
+      .limit(1);
+    return r ? rowToLead(r) : null;
+  }
+
   async listLeads(f: LeadFilter) {
     const l = schema.leads;
     const rows = await this.db

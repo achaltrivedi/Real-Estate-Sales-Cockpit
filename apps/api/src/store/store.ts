@@ -36,6 +36,8 @@ export interface Store {
   insertLead(lead: Lead): Promise<void>;
   updateLead(id: string, patch: Partial<Lead>): Promise<Lead | null>;
   getLead(id: string): Promise<Lead | null>;
+  /** Most recent lead with this exact (E.164-normalised) phone, for WhatsApp inbound. */
+  findLeadByPhone(phone: string): Promise<Lead | null>;
   listLeads(filter: LeadFilter): Promise<Lead[]>;
 
   insertConversation(c: Conversation): Promise<void>;

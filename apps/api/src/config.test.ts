@@ -48,4 +48,27 @@ describe('loadConfig', () => {
       databaseUrl: 'postgres://gsc:gsc@localhost:5432/gsc',
     });
   });
+
+  it('has scheduler / WhatsApp defaults and validates them', () => {
+    expect(loadConfig({})).toMatchObject({
+      followUpDelaysMs: [3_600_000, 86_400_000, 259_200_000],
+      quietHours: '22:00-08:00',
+      timeZone: 'Asia/Dubai',
+      schedulerPollMs: 15_000,
+      defaultProjectId: 'prj_azure_crest',
+      defaultCountryCode: '971',
+    });
+    expect(loadConfig({ FOLLOW_UP_DELAYS: '2m,10m' }).followUpDelaysMs).toEqual([120_000, 600_000]);
+    expect(() => loadConfig({ FOLLOW_UP_DELAYS: '1h,soon' })).toThrow(/Invalid duration/);
+    expect(() => loadConfig({ FOLLOW_UP_DELAYS: '1h,2h,3h,4h' })).toThrow(/at most 3/);
+    expect(() => loadConfig({ QUIET_HOURS: '10pm-8am' })).toThrow(/HH:MM/);
+    expect(() => loadConfig({ TIMEZONE: 'Mars/Olympus' })).toThrow(ConfigError);
+    expect(() => loadConfig({ DEFAULT_COUNTRY_CODE: '+971' })).toThrow(/DEFAULT_COUNTRY_CODE/);
+  });
+
+  it('validates adapter names so a typo cannot silently fall back to a mock', () => {
+    expect(() => loadConfig({ LLM_PROVIDER: 'openia' })).toThrow(/LLM_PROVIDER/);
+    expect(() => loadConfig({ MESSAGING_CHANNEL: 'whatsap' })).toThrow(/MESSAGING_CHANNEL/);
+    expect(loadConfig({ LLM_PROVIDER: 'openai' }).env).toBe('development');
+  });
 });

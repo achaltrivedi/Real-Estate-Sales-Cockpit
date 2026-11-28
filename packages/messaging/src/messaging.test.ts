@@ -5,9 +5,88 @@ import {
   createChannel,
   isOptIn,
   isOptOut,
+  normalizePhone,
   parseWhatsAppWebhook,
   renderTemplate,
+  verifyWhatsAppSignature,
+  whatsAppPayload,
 } from './index';
+import { createHmac } from 'node:crypto';
+
+describe('normalizePhone', () => {
+  it.each([
+    ['+971 50 123 4567', '+971501234567'],
+    ['050 123 4567', '+971501234567'],
+    ['00971501234567', '+971501234567'],
+    ['971501234567', '+971501234567'], // WhatsApp "from"
+    ['501234567', '+971501234567'],
+    ['+44 (20) 7946-0958', '+442079460958'],
+    ['٠٥٠١٢٣٤٥٦٧', '+971501234567'],
+  ])('%s → %s', (raw, e164) => expect(normalizePhone(raw)).toBe(e164));
+  it.each(['', 'call me', '123', '+0123456789', 'abc 050'])('rejects %s', (raw) =>
+    expect(normalizePhone(raw)).toBeNull(),
+  );
+});
+
+describe('verifyWhatsAppSignature', () => {
+  const body = '{"object":"whatsapp_business_account","entry":[]}';
+  const sig = 'sha256=' + createHmac('sha256', 'app-secret').update(body).digest('hex');
+  it('accepts the right signature only', () => {
+    expect(verifyWhatsAppSignature(body, sig, 'app-secret')).toBe(true);
+    expect(verifyWhatsAppSignature(body + ' ', sig, 'app-secret')).toBe(false);
+    expect(verifyWhatsAppSignature(body, sig, 'other-secret')).toBe(false);
+    expect(verifyWhatsAppSignature(body, undefined, 'app-secret')).toBe(false);
+    expect(verifyWhatsAppSignature(body, 'sha256=zz', 'app-secret')).toBe(false);
+  });
+});
+
+describe('whatsAppPayload', () => {
+  it('sends ≤3 options as reply buttons and strips the + from the number', () => {
+    const p = whatsAppPayload({
+      to: '+971500000001',
+      text: 'Investment or to live in?',
+      quickReplies: [
+        { id: 'purpose:investor', label: 'Investment' },
+        { id: 'purpose:end_user', label: 'To live in' },
+      ],
+    }) as { to: string; interactive: { type: string; action: { buttons: unknown[] } } };
+    expect(p.to).toBe('971500000001');
+    expect(p.interactive.type).toBe('button');
+    expect(p.interactive.action.buttons).toHaveLength(2);
+  });
+  it('uses a localised list button for more options', () => {
+    const p = whatsAppPayload({
+      to: '1',
+      text: 'x',
+      locale: 'ar',
+      quickReplies: ['a', 'b', 'c', 'd', 'e'].map((id) => ({ id, label: id })),
+    }) as { interactive: { action: { button: string } } };
+    expect(p.interactive.action.button).toBe('اختر');
+  });
+  it('sends templates with positional parameters', () => {
+    const p = whatsAppPayload({
+      to: '1',
+      text: 'rendered',
+      template: { name: 'follow_up_1', locale: 'ar', vars: { name: 'سارة' } },
+    }) as {
+      type: string;
+      template: {
+        name: string;
+        language: { code: string };
+        components: { parameters: { text: string }[] }[];
+      };
+    };
+    expect(p.type).toBe('template');
+    expect(p.template).toMatchObject({ name: 'follow_up_1', language: { code: 'ar' } });
+    expect(p.template.components[0]!.parameters[0]!.text).toBe('سارة');
+  });
+  it('falls back to plain text', () => {
+    expect(whatsAppPayload({ to: '1', text: 'hi' })).toMatchObject({
+      type: 'text',
+      text: { body: 'hi' },
+    });
+  });
+});
 
 describe('opt-out / opt-in', () => {
   it.each([
@@ -180,9 +259,11 @@ describe('WhatsAppChannel', () => {
     const [url, init] = fetchMock.mock.calls[0]!;
     expect(url).toContain('/123/messages');
     expect(init.headers.authorization).toBe('Bearer t');
+    // 4 options do not fit WhatsApp's 3 reply buttons: sent as a list so none is dropped.
     const body = JSON.parse(init.body);
-    expect(body.interactive.action.buttons).toHaveLength(3);
-    expect(body.interactive.action.buttons[0].reply.title.length).toBeLessThanOrEqual(20);
+    expect(body.interactive.type).toBe('list');
+    expect(body.interactive.action.sections[0].rows).toHaveLength(4);
+    expect(body.interactive.action.sections[0].rows[0].title.length).toBeLessThanOrEqual(24);
   });
 
   it('throws on a non-2xx response', async () => {

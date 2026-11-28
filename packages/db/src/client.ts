@@ -16,9 +16,28 @@ export interface DbHandle {
 
 export const DEFAULT_DATABASE_URL = 'postgres://gsc:gsc@localhost:5432/gsc';
 
-/** Connection pool for the API / scripts. Lazy: no socket is opened until the first query. */
+/**
+ * Supabase's transaction pooler (port 6543) cannot use prepared statements; the session pooler
+ * (5432) and direct connections can. Detected from the URL so the same code runs everywhere.
+ */
+export function usesTransactionPooler(url: string): boolean {
+  try {
+    return new URL(url).port === '6543';
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Connection pool for the API / scripts. Lazy: no socket is opened until the first query.
+ * TLS follows `sslmode` in the URL (Supabase: append `?sslmode=require`).
+ */
 export function createDb(url = DEFAULT_DATABASE_URL, opts: { max?: number } = {}): DbHandle {
-  const sql = postgres(url, { max: opts.max ?? 10, onnotice: () => {} });
+  const sql = postgres(url, {
+    max: opts.max ?? 10,
+    prepare: !usesTransactionPooler(url),
+    onnotice: () => {},
+  });
   const db = drizzle(sql, { schema });
   return { db, close: () => sql.end({ timeout: 5 }) };
 }

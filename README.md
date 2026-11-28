@@ -25,6 +25,20 @@ pnpm --filter @gsc/db seed          # upsert the fictional project (safe to re-r
 
 Postgres tests run in-process on PGlite, so `pnpm test` never needs Docker.
 
+### Supabase (free tier)
+
+1. Create a project at supabase.com → **Project Settings → Database → Connection string → Session pooler**.
+2. In `.env`: `DATA_DRIVER=postgres` and `DATABASE_URL=<that string>?sslmode=require` (the transaction pooler on port 6543 also works; prepared statements are switched off for it automatically).
+3. `pnpm --filter @gsc/db migrate && pnpm --filter @gsc/db seed`, then `pnpm dev:b`.
+
+Follow-up reminders use the same database (ADR 0002), so no Redis is needed anywhere.
+
+### Real AI and WhatsApp (optional)
+
+- `LLM_PROVIDER=openai`, `LLM_API_KEY=sk-…` (default model `gpt-4o-mini`; only free-text messages call it, quick replies don't). Set a spending limit in the OpenAI dashboard.
+- Try the WhatsApp flow locally without Meta: POST a Cloud-API-shaped body to `/webhooks/whatsapp` (see `apps/api/src/whatsapp-flow.test.ts`); replies land in the mock outbox and the conversation.
+- `FOLLOW_UP_DELAYS=1m,3m` makes reminders visible during a live demo.
+
 | Command | What |
 |---|---|
 | `pnpm dev:a` | web + api (Dev A loop) |

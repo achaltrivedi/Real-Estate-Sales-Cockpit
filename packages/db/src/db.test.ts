@@ -64,3 +64,16 @@ describe('@gsc/db', () => {
     expect(row).toMatchObject({ priceAed: first.priceAed + 1000, availability: 'sold' });
   });
 });
+
+describe('usesTransactionPooler', () => {
+  it('detects the Supabase transaction pooler port only', async () => {
+    const { usesTransactionPooler } = await import('./client');
+    expect(
+      usesTransactionPooler('postgresql://u:p@aws-0-eu.pooler.supabase.com:6543/postgres'),
+    ).toBe(true);
+    expect(
+      usesTransactionPooler('postgresql://u:p@aws-0-eu.pooler.supabase.com:5432/postgres'),
+    ).toBe(false);
+    expect(usesTransactionPooler('not a url')).toBe(false);
+  });
+});

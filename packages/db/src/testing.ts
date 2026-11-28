@@ -20,6 +20,6 @@ export async function createTestDb(): Promise<DbHandle> {
 /** Empties the tables the app writes to (leads & co.), keeping the seed. Cheap reset between tests. */
 export async function resetLeadData(db: Db): Promise<void> {
   await db.execute(
-    sql`truncate table viewings, messages, conversations, leads restart identity cascade`,
+    sql`truncate table jobs, viewings, messages, conversations, leads restart identity cascade`,
   );
 }
