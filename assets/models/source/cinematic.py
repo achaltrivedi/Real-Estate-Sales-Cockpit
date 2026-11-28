@@ -28,6 +28,8 @@ from mathutils import Vector
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import build_tower as bt  # noqa: E402
 
+bt.TEX_DIR = os.path.dirname(bt.TEX_DIR)  # renders use the 2048 px textures, the GLB the 512 px set
+
 SUN_ELEV = 3.2  # degrees
 SUN_ROT = 18.0  # degrees from +Y (sea)
 
@@ -118,6 +120,16 @@ class NT:
     def position(self):
         return self.n("ShaderNodeNewGeometry").outputs["Position"]
 
+    def image(self, name, size, vector=None):
+        """Seamless photo texture (assets/models/textures), box-projected at a real-world repeat of `size` units."""
+        tex = self.n("ShaderNodeTexImage", projection="BOX", projection_blend=0.25)
+        tex.image = bpy.data.images.load(os.path.join(bt.TEX_DIR, name + ".jpg"), check_existing=True)
+        vm = self.n("ShaderNodeVectorMath", operation="SCALE")
+        self.link(vector if vector is not None else self.position(), vm.inputs[0])
+        vm.inputs["Scale"].default_value = 1.0 / size
+        self.link(vm.outputs["Vector"], tex.inputs["Vector"])
+        return tex.outputs["Color"]
+
     def bump(self, height, strength, distance=0.1):
         b = self.n("ShaderNodeBump")
         b.inputs["Strength"].default_value = strength
@@ -140,6 +152,7 @@ def shade_plaster(m):
     bev.inputs["Radius"].default_value = 0.035
     nz = g.noise(40.0, 2.0)
     col = g.mix_rgb(g.math("MULTIPLY", nz.outputs["Fac"], 0.15), srgb("#F4F0E9"), srgb("#E7E0D4"))
+    col = g.mix_rgb(0.55, col, g.image("plaster", 1.4))
     p = g.principled(col, rough=0.42, Normal=bev.outputs["Normal"])
     g.surface(p.outputs[0])
 
@@ -148,44 +161,53 @@ def shade_bronze(m):
     g = NT(m)
     nz = g.noise(60.0, 6.0)
     rough = g.math("ADD", g.math("MULTIPLY", nz.outputs["Fac"], 0.15), 0.25)
-    p = g.principled(srgb("#A7794A"), rough=0.3, metal=1.0)
+    p = g.principled(g.image("bronze", 1.0), rough=0.3, metal=1.0)
     g.link(rough, p.inputs["Roughness"])
     g.surface(p.outputs[0])
 
 
 def shade_curtain_wall(m):
-    """Unit glazing: reflective glass, bronze mullions, warm interiors lit at random (per unit)."""
+    """Unit glazing (the mullions, sheers and lit rooms behind it are real geometry now): thin low-iron glass,
+    clear head-on with a cool tint, turning to a mirror of the sky at grazing angles. Shadow rays pass so
+    sunlight reaches the rooms."""
     g = NT(m)
-    pos = g.position()
-    sep = g.n("ShaderNodeSeparateXYZ")
-    g.link(pos, sep.inputs[0])
-    # Vertical mullions every 0.62 units along the facade (x+y works for both facade orientations).
-    along = g.math("ADD", sep.outputs[0], sep.outputs[1])
-    mull = g.math("LESS_THAN", g.math("FRACT", g.math("MULTIPLY", along, 1 / 0.62)), 0.07)
-    # Spandrel band at floor level.
-    zf = g.math("FRACT", sep.outputs[2])
-    spandrel = g.math("LESS_THAN", zf, 0.26)
-    frame = g.math("MAXIMUM", mull, spandrel)
+    lw = g.n("ShaderNodeLayerWeight")
+    lw.inputs["Blend"].default_value = 0.32
+    refl = g.math("ADD", g.math("MULTIPLY", lw.outputs["Fresnel"], 0.75), 0.07)
+    tr = g.n("ShaderNodeBsdfTransparent")
+    tr.inputs["Color"].default_value = srgb("#C3D2D5")
+    gl = g.n("ShaderNodeBsdfGlossy")
+    gl.inputs["Color"].default_value = srgb("#DCE6EA")
+    gl.inputs["Roughness"].default_value = 0.015
+    mx = g.n("ShaderNodeMixShader")
+    g.link(refl, mx.inputs[0])
+    g.link(tr.outputs[0], mx.inputs[1])
+    g.link(gl.outputs[0], mx.inputs[2])
+    lp = g.n("ShaderNodeLightPath")
+    sh = g.n("ShaderNodeMixShader")
+    g.link(lp.outputs["Is Shadow Ray"], sh.inputs[0])
+    g.link(mx.outputs[0], sh.inputs[1])
+    g.link(tr.outputs[0], sh.inputs[2])
+    g.surface(sh.outputs[0])
 
-    obj = g.n("ShaderNodeObjectInfo")
-    rnd = obj.outputs["Random"]
-    lit = g.math("GREATER_THAN", rnd, 0.38)
-    # Rooms: soft variation across the glazing (lamps, curtains, depth).
-    room = g.noise(3.0, 2.0)
-    room_v = g.math("ADD", g.math("MULTIPLY", room.outputs["Fac"], 1.6), -0.35)
-    warmth = g.mix_rgb(g.math("FRACT", g.math("MULTIPLY", rnd, 7.31)), srgb("#FFB46B"), srgb("#FFE2B8"))
-    strength = g.math("MULTIPLY", g.math("MULTIPLY", lit, g.math("MAXIMUM", room_v, 0.0)), 3.2)
-    strength = g.math("MULTIPLY", strength, g.math("SUBTRACT", 1.0, frame))
 
-    glass = g.principled(srgb("#1E2B33"), rough=0.035, Specular_IOR_Level=0.7, Coat_Weight=0.4)
-    g.link(warmth, glass.inputs["Emission Color"])
-    g.link(strength, glass.inputs["Emission Strength"])
-    metal = g.principled(srgb("#7B5B3A"), rough=0.35, metal=1.0)
-    mix = g.n("ShaderNodeMixShader")
-    g.link(frame, mix.inputs[0])
-    g.link(glass.outputs[0], mix.inputs[1])
-    g.link(metal.outputs[0], mix.inputs[2])
-    g.surface(mix.outputs[0])
+def shade_sheer(m):
+    """Sheer curtain: light linen that glows when the sun or a lamp is behind it."""
+    g = NT(m)
+    tl = g.n("ShaderNodeBsdfTranslucent")
+    tl.inputs["Color"].default_value = srgb("#F6F0E6")
+    df = g.n("ShaderNodeBsdfDiffuse")
+    df.inputs["Color"].default_value = srgb("#F1ECE3")
+    a = g.n("ShaderNodeMixShader")
+    a.inputs[0].default_value = 0.5
+    g.link(tl.outputs[0], a.inputs[1])
+    g.link(df.outputs[0], a.inputs[2])
+    tr = g.n("ShaderNodeBsdfTransparent")
+    b_ = g.n("ShaderNodeMixShader")
+    b_.inputs[0].default_value = 0.35
+    g.link(a.outputs[0], b_.inputs[1])
+    g.link(tr.outputs[0], b_.inputs[2])
+    g.surface(b_.outputs[0])
 
 
 def shade_clear_glass(m, tint="#DDEFF2"):
@@ -238,8 +260,9 @@ def shade_paving(m):
     brick = g.n("ShaderNodeTexBrick")
     brick.inputs["Scale"].default_value = 1.4
     brick.inputs["Mortar Size"].default_value = 0.01
-    brick.inputs["Color1"].default_value = srgb("#EDE6DA")
-    brick.inputs["Color2"].default_value = srgb("#E2D9CA")
+    stone = g.image("travertine", 0.8)
+    g.link(stone, brick.inputs["Color1"])
+    g.link(stone, brick.inputs["Color2"])
     brick.inputs["Mortar"].default_value = srgb("#CFC4B2")
     g.link(g.position(), brick.inputs["Vector"])
     p = g.principled(brick.outputs["Color"], rough=0.6)
@@ -265,27 +288,81 @@ def shade_teak(m):
     brick.inputs["Color2"].default_value = srgb("#7C4E2C")
     brick.inputs["Mortar"].default_value = srgb("#2E1E12")
     g.link(comb.outputs[0], brick.inputs["Vector"])
-    grain = g.noise(60.0, 4.0)
-    col = g.mix_rgb(g.math("MULTIPLY", grain.outputs["Fac"], 0.25), brick.outputs["Color"], srgb("#B07A4A"))
+    col = g.mix_rgb(0.75, brick.outputs["Color"], g.image("teak", 0.6, comb.outputs[0]))
     p = g.principled(col, rough=0.45, Coat_Weight=0.25, Normal=g.bump(brick.outputs["Fac"], 0.3, 0.01))
     g.surface(p.outputs[0])
 
 
 def shade_city(m):
-    """Distant towers at dusk: blue-grey glass with a random grid of lit windows."""
+    """Distant downtown: reflective glass towers (a tint per building) with lighter spandrel bands at each floor."""
     g = NT(m)
     pos = g.position()
-    scale = g.n("ShaderNodeVectorMath", operation="MULTIPLY")
-    scale.inputs[1].default_value = (1 / 0.9, 1 / 0.9, 1 / 0.8)
-    g.link(pos, scale.inputs[0])
-    cell = g.n("ShaderNodeVectorMath", operation="FLOOR")
-    g.link(scale.outputs[0], cell.inputs[0])
+    sep = g.n("ShaderNodeSeparateXYZ")
+    g.link(pos, sep.inputs[0])
+    # one tint per ~building-sized cell
+    cellv = g.n("ShaderNodeVectorMath", operation="SCALE")
+    cellv.inputs["Scale"].default_value = 1 / 9.0
+    g.link(pos, cellv.inputs[0])
+    fl = g.n("ShaderNodeVectorMath", operation="FLOOR")
+    g.link(cellv.outputs[0], fl.inputs[0])
+    comb = g.n("ShaderNodeCombineXYZ")
+    sepf = g.n("ShaderNodeSeparateXYZ")
+    g.link(fl.outputs[0], sepf.inputs[0])
+    g.link(sepf.outputs[0], comb.inputs[0])
+    g.link(sepf.outputs[1], comb.inputs[1])
     wn = g.n("ShaderNodeTexWhiteNoise", noise_dimensions="3D")
-    g.link(cell.outputs[0], wn.inputs["Vector"])
-    lit = g.math("GREATER_THAN", wn.outputs["Value"], 0.72)
-    p = g.principled(srgb("#67747F"), rough=0.3, Specular_IOR_Level=0.4, Emission_Color=srgb("#FFC98F"))
-    g.link(g.math("MULTIPLY", lit, 0.0), p.inputs["Emission Strength"])
+    g.link(comb.outputs[0], wn.inputs["Vector"])
+    ramp = g.n("ShaderNodeValToRGB")
+    els = ramp.color_ramp.elements
+    els[0].color = srgb("#2F3D49")
+    els[1].color = srgb("#55616A")
+    e = els.new(0.45)
+    e.color = srgb("#3F5258")
+    e2 = els.new(0.75)
+    e2.color = srgb("#6B6457")
+    ramp.color_ramp.interpolation = "CONSTANT"
+    g.link(wn.outputs["Value"], ramp.inputs[0])
+    # floor bands (0.8 unit floor-to-floor in the distance)
+    zf = g.math("FRACT", g.math("DIVIDE", sep.outputs[2], 0.8))
+    band = g.math("GREATER_THAN", zf, 0.8)
+    col = g.mix_rgb(band, ramp.outputs[0], srgb("#A9ADA9"))
+    rough = g.math("ADD", g.math("MULTIPLY", band, 0.5), 0.07)
+    p = g.principled(col, rough=0.07, Specular_IOR_Level=0.9)
+    g.link(rough, p.inputs["Roughness"])
     g.surface(p.outputs[0])
+
+
+def shade_urban(m):
+    """The ground towards the city, seen from the towers: landscaped near the site, then a hazy grid of low-rise
+    blocks, roads and parks (reads as the city's fabric without modelling it)."""
+    g = NT(m)
+    pos = g.position()
+    sep = g.n("ShaderNodeSeparateXYZ")
+    g.link(pos, sep.inputs[0])
+    b = g.n("ShaderNodeTexBrick")
+    b.offset = 0.35
+    b.offset_frequency = 3
+    b.inputs["Scale"].default_value = 1.0
+    b.inputs["Brick Width"].default_value = 13.0
+    b.inputs["Row Height"].default_value = 9.0
+    b.inputs["Mortar Size"].default_value = 1.1
+    b.inputs["Mortar Smooth"].default_value = 0.1
+    b.inputs["Color1"].default_value = srgb("#C9C0B2")
+    b.inputs["Color2"].default_value = srgb("#A79F94")
+    b.inputs["Mortar"].default_value = srgb("#6F6C68")
+    g.link(pos, b.inputs["Vector"])
+    fine = g.noise(1.2, 3.0)  # rooftops / courtyards inside a block
+    blocks = g.mix_rgb(g.math("MULTIPLY", fine.outputs["Fac"], 0.5), b.outputs["Color"], srgb("#8E877D"))
+    park = g.math("GREATER_THAN", g.noise(0.025, 2.0).outputs["Fac"], 0.6)
+    green = g.mix_rgb(g.noise(0.6, 3.0).outputs["Fac"], srgb("#5D6B45"), srgb("#7A8457"))
+    is_road = g.math("LESS_THAN", b.outputs["Fac"], 0.5)
+    parks = g.mix_rgb(g.math("MULTIPLY", park, g.math("SUBTRACT", 1.0, is_road)), blocks, green)
+    near = g.mix_rgb(g.noise(0.2, 4.0).outputs["Fac"], srgb("#CDBB98"), srgb("#BBA784"))
+    # landscaped close to the site, the city's grid from ~40 units out
+    t = g.math("MULTIPLY", g.math("ADD", sep.outputs[1], 40.0), -1 / 25.0)
+    fade = g.math("MINIMUM", g.math("MAXIMUM", t, 0.0), 1.0)
+    col = g.mix_rgb(fade, near, parks)
+    g.surface(g.principled(col, rough=0.92).outputs[0])
 
 
 def shade_leaf(m, color="#3F6B32"):
@@ -351,6 +428,9 @@ def upgrade_materials():
     shade_plaster(M["Plaster"])
     shade_bronze(M["Bronze"])
     shade_curtain_wall(M["UnitGlass"])
+    shade_sheer(M["Sheer"])
+    shade_emit(M["InteriorLight"], "#FFC98A", 7.0)
+    shade_simple(M["Mullion"], "#4A3B2D", rough=0.3, metal=1.0)
     shade_crown(M["CrownGlass"])
     shade_podium_glass(M["PodiumGlass"])
     shade_pool(M["Pool"])
@@ -534,7 +614,7 @@ def build(seed):
         "lamp": lambda m: shade_emit(m, "#FFD29A", 25.0),
         "pole": lambda m: shade_simple(m, "#3A3530", rough=0.5, metal=0.8),
         "sea": lambda m: shade_water(m, "#0C4656", 0.08, 0.35),
-        "land": lambda m: shade_textured(m, "#CDBB98", "#BBA784", 0.2),
+        "land": shade_urban,
         "clouds": shade_clouds,
     }.items():
         MAT[key] = mat_new(f"cin_{key}")
@@ -542,12 +622,6 @@ def build(seed):
 
     for name in ("T1_RoofPool", "T2_RoofPool"):  # flush with the deck (render only)
         bpy.data.objects[name].location.z -= 0.056
-    louvres = bmesh.new()
-    for i in range(70):
-        x = -12.0 + i * 0.35
-        for y in (6.63, -6.63):
-            bt.add_box(louvres, x, y, 0.95, 0.03, 0.07, bt.PODIUM_TOP - 0.03)
-    mesh_obj("Podium_Louvres", louvres, bpy.data.materials["Bronze"], colls["towers"])
     for bdef in seed["project"]["buildings"]:
         tower_dressing(bdef["id"], bdef["floors"], colls["towers"])
         roof_dressing(bdef["id"], bdef["floors"], colls["roof"])
@@ -662,7 +736,9 @@ def setup_render(quality):
     world.mist_settings.falloff = "QUADRATIC"
 
     el, rot = math.radians(SUN_ELEV), math.radians(SUN_ROT)
-    sun_dir = Vector((-math.sin(rot) * math.cos(el), math.cos(rot) * math.cos(el), math.sin(el)))
+    # same side as the Nishita sky's disc (sun_rotation turns it from +Y towards +X); a mirrored lamp
+    # put a second sun glint on the sea and cast shadows from the wrong side
+    sun_dir = Vector((math.sin(rot) * math.cos(el), math.cos(rot) * math.cos(el), math.sin(el)))
     sun = bpy.data.objects.new("Sun", bpy.data.lights.new("Sun", "SUN"))
     sun.data.energy = 3.2
     sun.data.color = (1.0, 0.78, 0.55)
@@ -860,4 +936,5 @@ def main():
     print("CROWN", {k: v.get("crown") for k, v in manifest["orientations"].items()})
 
 
-main()
+if __name__ == "__main__":
+    main()

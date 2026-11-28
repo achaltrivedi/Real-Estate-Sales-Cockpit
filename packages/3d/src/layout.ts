@@ -44,3 +44,16 @@ export function unitFacing(unit: Unit): [number, number] {
 export function layoutUnits(units: Unit[]): UnitBox[] {
   return units.map((unit) => ({ unit, position: unitCenter(unit), size: [UNIT_SIZE, FLOOR_H * 0.86, UNIT_SIZE] }));
 }
+
+/** Camera "dive" into a residence: ends just outside its corner glazing at eye level, looking in. */
+export interface Dive {
+  target: [number, number, number];
+  camera: [number, number, number];
+}
+
+export function unitDive(unit: Unit): Dive {
+  const [x, , z] = unitCenter(unit);
+  const y = PODIUM_TOP + (unit.floor - 3) * FLOOR_H + 0.47;
+  const [fx, fz] = unitFacing(unit);
+  return { target: [x, y, z], camera: [x + fx * 3.4, y + 0.08, z + fz * 3.4] };
+}

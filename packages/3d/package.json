@@ -5,7 +5,9 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
-    "./capability": "./src/capability.ts"
+    "./capability": "./src/capability.ts",
+    "./pano": "./src/PanoViewer.tsx",
+    "./layout": "./src/layout.ts"
   },
   "scripts": {
     "typecheck": "tsc -p tsconfig.json",

@@ -1,11 +1,25 @@
 'use client';
 
 import type { Unit } from '@gsc/contracts';
-import { canRender3d } from '@gsc/3d/capability';
+import { canRender3d, prefersReducedMotion } from '@gsc/3d/capability';
+import { type Dive, unitDive } from '@gsc/3d/layout';
 import { formatAed } from '@gsc/ui';
 import { useLocale, useTranslations } from 'next-intl';
 import dynamic from 'next/dynamic';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import {
+  AMENITY_TOURS,
+  INTERIORS,
+  ResidenceSheet,
+  TourOverlay,
+  type TourRequest,
+  firstPano,
+  onTourRequest,
+  src,
+  useEscapeLayer,
+  useScrollLock,
+  viewpointCode,
+} from '@/features/residence';
 import { Link } from '@/i18n/routing';
 
 const TowerScene = dynamic(() => import('@gsc/3d').then((m) => m.TowerScene), {
@@ -37,6 +51,11 @@ export function Experience3D({ units }: { units: Unit[] }) {
   const [full, setFull] = useState(false);
   const [mode, setMode] = useState<Mode>('architectural');
   const [selected, setSelected] = useState<Unit | null>(null);
+  const [inside, setInside] = useState(false);
+  const tr = useTranslations('residence');
+  /** The camera flying into a residence / amenity, then its 360° tour. `external`: asked for from elsewhere on the page. */
+  const [dive, setDive] = useState<{ request: TourRequest; to: Dive; external: boolean } | null>(null);
+  const [tour, setTour] = useState<{ request: TourRequest; external: boolean } | null>(null);
 
   useEffect(() => {
     setSupported(canRender3d());
@@ -50,19 +69,60 @@ export function Experience3D({ units }: { units: Unit[] }) {
   const close = useCallback(() => {
     setFull(false);
     setSelected(null);
+    setDive(null);
   }, []);
+  useEscapeLayer(full, close);
+  useScrollLock(full);
 
+  /** Fly into a residence or amenity, then open its tour (straight away with reduced motion). */
+  const startTour = useCallback(
+    (request: TourRequest, external: boolean) => {
+      let to: Dive;
+      if (request.kind === 'residence') {
+        const unit = request.unit ?? units.find((u) => u.code === viewpointCode(request.type));
+        if (!unit) return false;
+        to = unitDive(unit);
+      } else {
+        to = AMENITY_TOURS[request.key].fly;
+      }
+      new Image().src = firstPano(request); // warm the cache during the flight
+      if (prefersReducedMotion()) {
+        setTour({ request, external });
+        return true;
+      }
+      setNear(true);
+      setFull(true);
+      setInside(false);
+      setDive({ request, to, external });
+      return true;
+    },
+    [units],
+  );
+
+  useEffect(() => (supported ? onTourRequest((req) => startTour(req, true)) : undefined), [supported, startTour]);
+
+  const diveRef = useRef(dive);
+  diveRef.current = dive;
+  const arrive = useCallback(() => {
+    const d = diveRef.current;
+    if (d) setTour((cur) => cur ?? { request: d.request, external: d.external });
+  }, []);
+  // Never strand the visitor mid-flight (slow model download, background tab).
   useEffect(() => {
-    if (!full) return;
-    const prev = document.documentElement.style.overflow;
-    document.documentElement.style.overflow = 'hidden';
-    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && close();
-    window.addEventListener('keydown', onKey);
-    return () => {
-      document.documentElement.style.overflow = prev;
-      window.removeEventListener('keydown', onKey);
-    };
-  }, [full, close]);
+    if (!dive || tour) return;
+    const id = setTimeout(arrive, 4500);
+    return () => clearTimeout(id);
+  }, [dive, tour, arrive]);
+
+  const endTour = useCallback(() => {
+    const external = tour?.external;
+    setTour(null);
+    setDive(null);
+    if (external) {
+      setFull(false);
+      setSelected(null);
+    }
+  }, [tour]);
 
   const onSelect = (u: Unit) => {
     setSelected(u);
@@ -84,11 +144,14 @@ export function Experience3D({ units }: { units: Unit[] }) {
           <p className="max-w-md text-ivory/65 md:justify-self-end">{t('body')}</p>
         </div>
 
+        {/* The reveal animation lives on a wrapper whose class never changes: the stage's own class flips for
+            full screen, and React rewriting it would drop the `is-in` that useReveal added (stage stuck at opacity 0). */}
+        <div className="reveal mt-12">
         <div
           className={
             full
               ? 'fixed inset-0 z-[70] bg-night'
-              : 'reveal relative mt-12 aspect-[4/5] overflow-hidden rounded-[22px] ring-1 ring-white/10 sm:aspect-[16/9]'
+              : 'relative aspect-[4/5] overflow-hidden rounded-[22px] ring-1 ring-white/10 sm:aspect-[16/9]'
           }
           role={full ? 'dialog' : undefined}
           aria-modal={full || undefined}
@@ -101,6 +164,9 @@ export function Experience3D({ units }: { units: Unit[] }) {
               autoRotate={!full && !selected}
               selectedUnitId={selected?.id}
               onSelect={onSelect}
+              dive={dive?.to ?? null}
+              onDiveEnd={arrive}
+              paused={!!tour}
               className="absolute inset-0"
             />
           ) : (
@@ -143,8 +209,21 @@ export function Experience3D({ units }: { units: Unit[] }) {
 
           {!supported && <p className="absolute inset-x-0 bottom-6 text-center text-sm text-ivory/70">{t('unsupported')}</p>}
 
-          {full && selected && (
-            <div className="absolute bottom-16 end-4 w-[min(340px,calc(100vw-32px))] rounded-[18px] bg-ivory p-5 text-night shadow-2xl md:bottom-6 md:end-6">
+          {full && selected && !dive && (
+            <div className="absolute bottom-16 end-4 w-[min(340px,calc(100vw-32px))] overflow-hidden rounded-[18px] bg-ivory text-night shadow-2xl md:bottom-6 md:end-6">
+              <button
+                type="button"
+                onClick={() => startTour({ kind: 'residence', type: selected.type, unit: selected }, false)}
+                className="group relative block h-32 w-full overflow-hidden"
+                aria-label={tr('stepInside')}
+              >
+                <img src={src(INTERIORS[selected.type][0]!, 800)} alt="" className="h-full w-full object-cover transition duration-1000 ease-luxe group-hover:scale-105" />
+                <span className="absolute inset-0 bg-gradient-to-t from-night/60 to-transparent" />
+                <span className="absolute bottom-3 start-4 rounded-pill bg-ivory/90 px-3.5 py-1.5 text-[10px] uppercase tracking-[0.18em] text-night rtl:tracking-normal">
+                  {tr('stepInside')} · 360° →
+                </span>
+              </button>
+              <div className="p-5">
               <p className="eyebrow text-champagne-dark">{tu(`type.${selected.type}`)}</p>
               <p className="mt-1 font-display text-3xl">{selected.code}</p>
               <p className="mt-1 text-sm text-ink-muted">
@@ -154,6 +233,9 @@ export function Experience3D({ units }: { units: Unit[] }) {
                 <span className="text-lg font-medium">{formatAed(selected.priceAed, locale)}</span>
                 <span className="text-xs text-ink-muted">{tu(`availability.${selected.availability}`)}</span>
               </div>
+              <button type="button" onClick={() => setInside(true)} className="mt-3 text-xs text-champagne-dark underline-offset-4 hover:underline">
+                {tr('tour.planGallery')}
+              </button>
               <div className="mt-4 flex gap-2">
                 <Link href={`/explorer?unit=${selected.id}`} className="flex-1 rounded-pill bg-night py-2.5 text-center text-[11px] uppercase tracking-[0.16em] text-ivory">
                   {t('details')}
@@ -162,10 +244,16 @@ export function Experience3D({ units }: { units: Unit[] }) {
                   {t('plan')}
                 </Link>
               </div>
+              </div>
             </div>
           )}
+          {full && selected && inside && <ResidenceSheet type={selected.type} unit={selected} onClose={() => setInside(false)} />}
+          {/* The flight ends at the glass: dim the model as the interior comes up. */}
+          <div className={`pointer-events-none absolute inset-0 bg-night transition-opacity duration-700 ease-luxe ${tour ? 'opacity-100' : 'opacity-0'}`} />
+        </div>
         </div>
         {!full && <p className="mt-4 text-center text-xs text-ivory/45">{t('hint')}</p>}
+        {tour && <TourOverlay request={tour.request} onClose={endTour} />}
       </div>
     </section>
   );

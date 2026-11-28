@@ -108,6 +108,8 @@ export function CinematicHero({ eyebrow }: { eyebrow?: string }) {
       }
     };
 
+    // The loop only runs while the dive is easing towards the scroll position; once settled it sleeps until the
+    // next scroll event, so the rest of the page (and the 3D model further down) isn't sharing the main thread.
     const tick = (now: number) => {
       const dt = Math.min(0.05, (now - last) / 1000);
       last = now;
@@ -118,6 +120,11 @@ export function CinematicHero({ eyebrow }: { eyebrow?: string }) {
         apply(current);
         shown = current;
       }
+      raf = current === target ? 0 : requestAnimationFrame(tick);
+    };
+    const wake = () => {
+      if (raf) return;
+      last = performance.now();
       raf = requestAnimationFrame(tick);
     };
 
@@ -127,13 +134,13 @@ export function CinematicHero({ eyebrow }: { eyebrow?: string }) {
       apply(reduce ? 0 : current);
     };
     window.addEventListener('resize', onResize);
+    if (!reduce) window.addEventListener('scroll', wake, { passive: true });
     portraitMq.addEventListener('change', onResize);
     if (reduce) {
       apply(0);
     } else {
       current = target = readScroll();
       apply(current);
-      raf = requestAnimationFrame(tick);
     }
 
     // Reveal as soon as the sky + towers have decoded (5 s failsafe); the rest stream in behind.
@@ -149,6 +156,7 @@ export function CinematicHero({ eyebrow }: { eyebrow?: string }) {
       cancelAnimationFrame(raf);
       window.clearTimeout(failsafe);
       window.removeEventListener('resize', onResize);
+      window.removeEventListener('scroll', wake);
       portraitMq.removeEventListener('change', onResize);
     };
   }, []);

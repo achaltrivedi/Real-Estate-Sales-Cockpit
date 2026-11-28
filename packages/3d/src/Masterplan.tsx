@@ -7,9 +7,9 @@
 export function Masterplan() {
   return (
     <group>
-      {/* plot */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.02, 0]}>
-        <planeGeometry args={[160, 160]} />
+      {/* land on the city side; the live lagoon fills the sea side (-z) */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.02, 34.25]}>
+        <planeGeometry args={[160, 91.5]} />
         <meshStandardMaterial color="#E9DFCC" />
       </mesh>
       {/* access road */}

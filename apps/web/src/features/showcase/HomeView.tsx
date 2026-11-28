@@ -5,13 +5,14 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useMemo } from 'react';
 import { Link } from '@/i18n/routing';
 import { inventoryStats } from '@/features/explorer';
+import { AmenitiesSection, ARRIVAL, FACADE, type Photo, ResidencesShowcase, src, srcSet } from '@/features/residence';
 import { useReveal } from '@/features/site';
 import { useInventory } from '@/lib/use-inventory';
 import { CinematicHero } from './CinematicHero';
 import { Experience3D } from './Experience3D';
 import { planSplit, residenceSummary } from './residences';
 
-/** Home: cinematic arrival → the address → the model in 3D → residences → payment plans. */
+/** Home: cinematic arrival → the address → the model in 3D → residences → amenities → payment plans. */
 export function HomeView() {
   const t = useTranslations('home');
   const tu = useTranslations('units');
@@ -42,6 +43,11 @@ export function HomeView() {
           <Stat label={t('types')} value={stats.types.length ? `${tu('typeShort.studio')} – ${tu('typeShort.penthouse')}` : '—'} />
         </dl>
         {inv.status === 'error' && <p className="mt-8 text-sm text-ink-muted">{t('apiDown')}</p>}
+
+        <div className="mt-20 grid gap-5 md:mt-28 md:grid-cols-[1.65fr_1fr] md:items-end">
+          <Figure photo={ARRIVAL} caption={t('arrivalCaption')} className="aspect-[16/10]" sizes="(min-width: 768px) 60vw, 100vw" />
+          <Figure photo={FACADE} caption={t('facadeCaption')} className="aspect-[4/5]" sizes="(min-width: 768px) 36vw, 100vw" delay={120} />
+        </div>
       </section>
 
       <Experience3D units={units} />
@@ -57,33 +63,10 @@ export function HomeView() {
             {t('cta')}
           </Link>
         </div>
-        <ul className="mt-14 divide-y divide-night/10 border-y border-night/10">
-          {residences.map((r, i) => (
-            <li key={r.type} className="reveal" style={{ transitionDelay: `${i * 70}ms` }}>
-              <Link
-                href={`/explorer?type=${r.type}`}
-                className="group grid grid-cols-[1fr_auto] items-center gap-4 py-7 transition-colors duration-500 hover:bg-ivory-deep/60 md:grid-cols-[1.3fr_1fr_1fr_1fr_auto] md:px-4"
-              >
-                <span>
-                  <span className="block font-display text-3xl font-light text-night md:text-4xl">{tu(`type.${r.type}`)}</span>
-                  <span className="mt-1 block text-xs text-ink-muted md:hidden">
-                    {t('from')} {formatAed(r.fromPriceAed, locale)} · {t('availableCount', { count: r.available })}
-                  </span>
-                </span>
-                <span className="hidden text-sm text-ink-muted md:block">
-                  {formatNumber(r.areaSqft[0], locale)}–{formatNumber(r.areaSqft[1], locale)} {tu('sqft')}
-                </span>
-                <span className="hidden text-sm text-ink-muted md:block">{t('availableCount', { count: r.available })}</span>
-                <span className="hidden text-sm md:block">
-                  <span className="text-ink-muted">{t('from')} </span>
-                  {formatAed(r.fromPriceAed, locale)}
-                </span>
-                <span className="text-xl text-champagne transition-transform duration-500 ease-luxe group-hover:translate-x-1.5 rtl:rotate-180 rtl:group-hover:-translate-x-1.5">→</span>
-              </Link>
-            </li>
-          ))}
-        </ul>
+        <ResidencesShowcase residences={residences} units={units} />
       </section>
+
+      <AmenitiesSection />
 
       {/* Payment plans */}
       <section className="bg-ivory-deep">
@@ -124,5 +107,16 @@ function Stat({ label, value }: { label: string; value: string }) {
       <dt className="eyebrow text-ink-muted">{label}</dt>
       <dd className="mt-3 font-display text-2xl text-night md:text-3xl">{value}</dd>
     </div>
+  );
+}
+
+function Figure({ photo, caption, className, sizes, delay = 0 }: { photo: Photo; caption: string; className: string; sizes: string; delay?: number }) {
+  return (
+    <figure className="reveal" style={{ transitionDelay: `${delay}ms` }}>
+      <div className={`overflow-hidden rounded-[22px] bg-ivory-deep ${className}`}>
+        <img src={src(photo)} srcSet={srcSet(photo)} sizes={sizes} alt={caption} loading="lazy" className="h-full w-full object-cover" />
+      </div>
+      <figcaption className="mt-4 text-sm text-ink-muted">{caption}</figcaption>
+    </figure>
   );
 }

@@ -21,6 +21,12 @@ html[dir='rtl'] body { font-family: var(--font-arabic), var(--font-sans), system
   html[dir='rtl'] .btn-luxe, html[dir='rtl'] .btn-ghost-light, html[dir='rtl'] .btn-ghost-dark { letter-spacing: 0; @apply text-sm normal-case; }
 }
 
+/** Full-bleed horizontal track whose first card lines up with the max-w-7xl content column. */
+.track-gutter { padding-inline: 1.25rem; scroll-padding-inline: 1.25rem; }
+@media (min-width: 768px) {
+  .track-gutter { padding-inline: max(2rem, calc((100% - 80rem) / 2 + 2rem)); scroll-padding-inline: max(2rem, calc((100% - 80rem) / 2 + 2rem)); }
+}
+
 /** Reveal-on-scroll (toggled by useReveal). */
 .reveal { opacity: 0; transform: translateY(28px); transition: opacity 1.1s cubic-bezier(0.22, 1, 0.36, 1), transform 1.1s cubic-bezier(0.22, 1, 0.36, 1); }
 .reveal.is-in { opacity: 1; transform: none; }
@@ -37,3 +43,82 @@ html[dir='rtl'] body { font-family: var(--font-arabic), var(--font-sans), system
 .dive-layer { position: absolute; inset: 0; display: block; pointer-events: none; will-change: transform, opacity; }
 .dive-layer img { object-fit: cover; }
 @keyframes cue { 0% { transform: translateY(-100%); } 60%, 100% { transform: translateY(300%); } }
+
+/* 360° tour hotspots (rendered by drei <Html> inside the panorama) */
+.pano-spot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  background: none;
+  border: 0;
+  padding: 0;
+  color: #f7f3ec;
+  -webkit-tap-highlight-color: transparent;
+}
+.pano-spot-ring {
+  position: relative;
+  width: 34px;
+  height: 34px;
+  border-radius: 9999px;
+  border: 2px solid rgba(247, 243, 236, 0.95);
+  background: rgba(11, 22, 34, 0.35);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(4px);
+  transition: transform 300ms cubic-bezier(0.22, 1, 0.36, 1), background 300ms;
+}
+.pano-spot-ring::after {
+  content: '';
+  position: absolute;
+  inset: 9px;
+  border-radius: 9999px;
+  background: #c8a55a;
+}
+.pano-spot-ring::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 9999px;
+  border: 2px solid rgba(200, 165, 90, 0.8);
+  animation: pano-pulse 2.4s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+}
+.pano-spot-label {
+  white-space: nowrap;
+  border-radius: 9999px;
+  background: rgba(11, 22, 34, 0.62);
+  padding: 6px 12px;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  backdrop-filter: blur(8px);
+}
+[dir='rtl'] .pano-spot-label {
+  letter-spacing: 0;
+}
+.pano-spot:hover .pano-spot-ring,
+.pano-spot:focus-visible .pano-spot-ring {
+  transform: scale(1.15);
+  background: rgba(200, 165, 90, 0.35);
+}
+.pano-spot:focus-visible {
+  outline: none;
+}
+.pano-spot:focus-visible .pano-spot-label {
+  box-shadow: 0 0 0 2px #c8a55a;
+}
+@keyframes pano-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(1.9);
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pano-spot-ring::before {
+    animation: none;
+  }
+}

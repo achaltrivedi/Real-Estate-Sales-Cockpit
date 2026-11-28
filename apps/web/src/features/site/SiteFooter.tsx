@@ -1,5 +1,6 @@
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/routing';
+import { Monogram } from './Monogram';
 
 export function SiteFooter() {
   const t = useTranslations('footer');
@@ -7,7 +8,8 @@ export function SiteFooter() {
     <footer className="bg-night text-ivory/70">
       <div className="mx-auto grid max-w-7xl gap-10 px-5 py-16 md:grid-cols-[1.4fr_1fr_1fr] md:px-8">
         <div>
-          <p className="font-display text-3xl font-light text-ivory">Azure Crest</p>
+          <Monogram className="h-14 w-14 text-champagne" />
+          <p className="mt-5 font-display text-3xl font-light text-ivory">Azure Crest</p>
           <p className="mt-3 max-w-sm text-sm leading-relaxed">{t('tagline')}</p>
         </div>
         <div className="space-y-2 text-sm">

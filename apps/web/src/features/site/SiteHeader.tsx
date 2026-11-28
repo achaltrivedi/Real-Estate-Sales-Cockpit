@@ -3,6 +3,7 @@
 import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 import { Link, usePathname } from '@/i18n/routing';
+import { Monogram } from './Monogram';
 
 /**
  * Fixed site chrome: sample-data notice (always visible, compliance) + navigation.
@@ -38,7 +39,8 @@ export function SiteHeader() {
           }`}
         >
           <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 md:px-8">
-            <Link href="/" className={`flex items-baseline gap-2 ${solid ? 'text-night' : 'text-white'}`}>
+            <Link href="/" className={`flex items-center gap-3 ${solid ? 'text-night' : 'text-white'}`}>
+              <Monogram className={`h-8 w-8 transition-colors duration-500 ${solid ? 'text-champagne-dark' : 'text-champagne-light'}`} />
               <span className="font-display text-2xl font-light tracking-wide">Azure Crest</span>
               <span className="eyebrow hidden opacity-70 sm:inline">{t('residences')}</span>
             </Link>

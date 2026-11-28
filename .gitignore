@@ -17,3 +17,11 @@ next-env.d.ts
 # Blender preview renders (regenerate with assets/models/source/build_tower.py --preview)
 assets/models/previews/
 __pycache__/
+
+# Raw image drops (~400 MB). Processed outputs are committed; rebuild with assets/images/prepare_images.py
+assets/source-images/
+
+# HDR window views rendered by assets/models/source/tours.py (cache, regenerable)
+assets/models/env/
+# CC0 furniture models + materials for the tour renders (re-download with assets/models/source/fetch_assets.py)
+assets/models/library/
