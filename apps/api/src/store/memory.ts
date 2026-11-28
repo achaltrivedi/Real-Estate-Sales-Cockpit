@@ -1,7 +1,14 @@
 import type { Conversation, Lead, SeedFile, Viewing } from '@gsc/contracts';
-import type { Store } from './store';
+import type { LeadFilter, Store } from './store';
 
+const copy = <T>(v: T): T => structuredClone(v);
+const byId = <T extends { id: string }>(a: T, b: T) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0);
+const defined = <T extends object>(o: T): Partial<T> =>
+  Object.fromEntries(Object.entries(o).filter(([, v]) => v !== undefined)) as Partial<T>;
+
+/** In-memory store seeded from assets/seed. Default driver: the demo runs with no database. */
 export class MemoryStore implements Store {
+  readonly name = 'memory' as const;
   private leads = new Map<string, Lead>();
   private conversations = new Map<string, Conversation>();
   private viewings = new Map<string, Viewing>();
@@ -10,54 +17,78 @@ export class MemoryStore implements Store {
 
   async getProject(id: string) {
     if (this.seed.project.id !== id) return null;
-    return { project: this.seed.project, paymentPlans: this.seed.paymentPlans };
+    return copy({
+      project: this.seed.project,
+      paymentPlans: this.seed.paymentPlans.filter((p) => p.projectId === id).sort(byId),
+    });
   }
 
   async listUnits(projectId: string, q: Parameters<Store['listUnits']>[1]) {
-    return this.seed.units.filter(
-      (u) =>
-        u.projectId === projectId &&
-        (!q.type || u.type === q.type) &&
-        (!q.view || u.view === q.view) &&
-        (!q.availability || u.availability === q.availability) &&
-        (q.minPrice === undefined || u.priceAed >= q.minPrice) &&
-        (q.maxPrice === undefined || u.priceAed <= q.maxPrice) &&
-        (q.minFloor === undefined || u.floor >= q.minFloor) &&
-        (q.maxFloor === undefined || u.floor <= q.maxFloor),
+    return copy(
+      this.seed.units
+        .filter(
+          (u) =>
+            u.projectId === projectId &&
+            (!q.type || u.type === q.type) &&
+            (!q.view || u.view === q.view) &&
+            (!q.availability || u.availability === q.availability) &&
+            (q.minPrice === undefined || u.priceAed >= q.minPrice) &&
+            (q.maxPrice === undefined || u.priceAed <= q.maxPrice) &&
+            (q.minFloor === undefined || u.floor >= q.minFloor) &&
+            (q.maxFloor === undefined || u.floor <= q.maxFloor),
+        )
+        .sort(byId),
     );
   }
 
+  async getUnit(id: string) {
+    const u = this.seed.units.find((x) => x.id === id);
+    return u ? copy(u) : null;
+  }
+
   async listSalespeople() {
-    return this.seed.salespeople;
+    return copy([...this.seed.salespeople].sort(byId));
   }
 
   async insertLead(lead: Lead) {
-    this.leads.set(lead.id, lead);
+    this.leads.set(lead.id, copy(lead));
   }
   async updateLead(id: string, patch: Partial<Lead>) {
     const cur = this.leads.get(id);
     if (!cur) return null;
-    const next = { ...cur, ...patch, updatedAt: new Date().toISOString() };
+    const next: Lead = {
+      ...cur,
+      ...copy(defined(patch)),
+      id: cur.id,
+      createdAt: cur.createdAt,
+      updatedAt: new Date().toISOString(),
+    };
     this.leads.set(id, next);
-    return next;
+    return copy(next);
   }
   async getLead(id: string) {
-    return this.leads.get(id) ?? null;
+    const l = this.leads.get(id);
+    return l ? copy(l) : null;
   }
-  async listLeads(f: { stage?: Lead['stage']; projectId?: string }) {
-    return [...this.leads.values()]
-      .filter((l) => (!f.stage || l.stage === f.stage) && (!f.projectId || l.projectId === f.projectId))
-      .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+  async listLeads(f: LeadFilter) {
+    return copy(
+      [...this.leads.values()]
+        .filter(
+          (l) => (!f.stage || l.stage === f.stage) && (!f.projectId || l.projectId === f.projectId),
+        )
+        .sort((a, b) => b.createdAt.localeCompare(a.createdAt) || (a.id < b.id ? 1 : -1)),
+    );
   }
 
   async insertConversation(c: Conversation) {
-    this.conversations.set(c.id, c);
+    this.conversations.set(c.id, copy(c));
   }
   async getConversation(id: string) {
-    return this.conversations.get(id) ?? null;
+    const c = this.conversations.get(id);
+    return c ? copy(c) : null;
   }
   async appendMessages(id: string, msgs: Conversation['messages']) {
-    this.conversations.get(id)?.messages.push(...msgs);
+    this.conversations.get(id)?.messages.push(...copy(msgs));
   }
   async setConversationStatus(id: string, status: Conversation['status']) {
     const c = this.conversations.get(id);
@@ -65,6 +96,9 @@ export class MemoryStore implements Store {
   }
 
   async insertViewing(v: Viewing) {
-    this.viewings.set(v.id, v);
+    this.viewings.set(v.id, copy(v));
   }
+
+  async ping() {}
+  async close() {}
 }

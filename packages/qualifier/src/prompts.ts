@@ -13,8 +13,14 @@ export const QUESTIONS: Record<QualificationField, Prompt> = {
   purpose: {
     text: { en: 'Is this for investment or to live in?', ar: 'هل الشراء بغرض الاستثمار أم للسكن؟' },
     quickReplies: {
-      en: [{ id: 'purpose:investor', label: 'Investment' }, { id: 'purpose:end_user', label: 'To live in' }],
-      ar: [{ id: 'purpose:investor', label: 'استثمار' }, { id: 'purpose:end_user', label: 'للسكن' }],
+      en: [
+        { id: 'purpose:investor', label: 'Investment' },
+        { id: 'purpose:end_user', label: 'To live in' },
+      ],
+      ar: [
+        { id: 'purpose:investor', label: 'استثمار' },
+        { id: 'purpose:end_user', label: 'للسكن' },
+      ],
     },
   },
   unitType: {
@@ -37,7 +43,10 @@ export const QUESTIONS: Record<QualificationField, Prompt> = {
     },
   },
   budget: {
-    text: { en: 'What budget range do you have in mind (AED)?', ar: 'ما هي ميزانيتك التقريبية (درهم)؟' },
+    text: {
+      en: 'What budget range do you have in mind (AED)?',
+      ar: 'ما هي ميزانيتك التقريبية (درهم)؟',
+    },
     quickReplies: {
       en: [
         { id: 'budget:0-1000000', label: 'Up to 1M' },
@@ -85,6 +94,10 @@ export const COPY = {
     en: 'Connecting you with a human advisor now. They will reply here shortly.',
     ar: 'نقوم الآن بتحويلك إلى مستشار. سيرد عليك هنا قريباً.',
   },
+  didntCatch: {
+    en: 'Sorry, I did not catch that.',
+    ar: 'عذراً، لم أفهم ذلك.',
+  },
   optedOut: {
     en: 'You have been unsubscribed. Reply START to resume.',
     ar: 'تم إلغاء اشتراكك. أرسل START للاستئناف.',
@@ -92,6 +105,12 @@ export const COPY = {
 } satisfies Record<string, Record<Locale, string>>;
 
 export const BOOK_VIEWING_REPLIES: Record<Locale, QuickReply[]> = {
-  en: [{ id: 'action:book_viewing', label: 'Book a viewing' }, { id: 'action:handoff', label: 'Talk to a human' }],
-  ar: [{ id: 'action:book_viewing', label: 'احجز معاينة' }, { id: 'action:handoff', label: 'تحدث مع مستشار' }],
+  en: [
+    { id: 'action:book_viewing', label: 'Book a viewing' },
+    { id: 'action:handoff', label: 'Talk to a human' },
+  ],
+  ar: [
+    { id: 'action:book_viewing', label: 'احجز معاينة' },
+    { id: 'action:handoff', label: 'تحدث مع مستشار' },
+  ],
 };
