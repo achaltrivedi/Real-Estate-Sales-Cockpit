@@ -144,6 +144,16 @@ export function describeStoreContract(
       expect(await store.updateLead('lead_nope', { stage: 'lost' })).toBeNull();
     });
 
+    it('finds the most recent lead by phone', async () => {
+      const old = lead({ phone: '+971500000009', createdAt: '2026-01-01T09:00:00.000Z' });
+      const recent = lead({ phone: '+971500000009', createdAt: '2026-01-05T09:00:00.000Z' });
+      await store.insertLead(old);
+      await store.insertLead(recent);
+      await store.insertLead(lead({ phone: '+971500000010' }));
+      expect((await store.findLeadByPhone('+971500000009'))?.id).toBe(recent.id);
+      expect(await store.findLeadByPhone('+15550000000')).toBeNull();
+    });
+
     it('lists leads newest first and filters by stage / project', async () => {
       const a = lead({ createdAt: '2026-01-01T09:00:00.000Z' });
       const b = lead({ createdAt: '2026-01-02T09:00:00.000Z', stage: 'qualified' });

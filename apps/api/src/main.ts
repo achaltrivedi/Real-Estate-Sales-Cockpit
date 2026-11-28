@@ -44,6 +44,7 @@ for (const signal of ['SIGINT', 'SIGTERM'] as const) {
 }
 
 await app.listen({ port: config.port, host: config.host });
+deps.scheduler.start(); // follow-ups + send retries; stopped by app.close()
 app.log.info(
   {
     store: deps.store.name,

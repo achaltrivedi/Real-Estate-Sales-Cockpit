@@ -3,52 +3,89 @@ import cors from '@fastify/cors';
 import { EVENTS } from '@gsc/contracts';
 import { createCrm } from '@gsc/crm';
 import { createDb, loadSeed } from '@gsc/db';
-import { createChannel } from '@gsc/messaging';
-import { MockLlm, createQualifier } from '@gsc/qualifier';
-import Fastify from 'fastify';
+import { createChannel, verifyWhatsAppSignature } from '@gsc/messaging';
+import { createLlm, createQualifier } from '@gsc/qualifier';
+import Fastify, { type FastifyInstance } from 'fastify';
 import { loadConfig, type Config } from './config';
 import { HttpError } from './domain/errors';
 import { EventBus } from './domain/events';
-import { createLeadService, type Deps } from './domain/lead-service';
+import { createLeadService, type Deps, type Logger } from './domain/lead-service';
 import { funnel } from './domain/metrics';
 import { registerErrorHandling } from './http/errors';
 import { route } from './http/route';
-import { NoopScheduler } from './scheduler';
+import { JobScheduler, MemoryJobStore, PostgresJobStore, type JobStore } from './scheduler';
 import { MemoryStore } from './store/memory';
 import { PostgresStore } from './store/postgres';
 import type { Store } from './store/store';
 
-function createStore(config: Config): Store {
+function createPersistence(config: Config): { store: Store; jobs: JobStore } {
   if (config.dataDriver === 'postgres') {
     const { db, close } = createDb(config.databaseUrl);
-    return new PostgresStore(db, close);
+    return { store: new PostgresStore(db, close), jobs: new PostgresJobStore(db) };
   }
-  return new MemoryStore(loadSeed());
+  return { store: new MemoryStore(loadSeed()), jobs: new MemoryJobStore() };
+}
+
+/** Logger used before Fastify's exists; `useLogger` swaps in `app.log`. */
+const bootLogger: Logger = {
+  warn: (obj, msg) => console.warn(msg ?? '', obj),
+  error: (obj, msg) => console.error(msg ?? '', obj),
+};
+
+export interface AppDeps extends Deps {
+  /** Points adapter logging (LLM fallback, scheduler) at the app logger. */
+  useLogger?(log: Logger): void;
 }
 
 /** Composition root: the ONLY place that picks concrete adapters (mock vs real). Mock is always the default. */
 export function buildDeps(
   env: Record<string, string | undefined> = process.env,
   config: Config = loadConfig(env),
-): Deps {
+): AppDeps {
+  let log: Logger = bootLogger;
   const crm = createCrm(env);
   const bus = new EventBus();
   bus.on(EVENTS.leadStageChanged, (p) => crm.pushEvent(EVENTS.leadStageChanged, p));
   bus.on(EVENTS.leadQualified, (p) => crm.pushEvent(EVENTS.leadQualified, p));
   bus.on(EVENTS.viewingBooked, (p) => crm.pushEvent(EVENTS.viewingBooked, p));
+
+  const llm = createLlm(env, {
+    onError: (err) =>
+      log.warn(
+        { err: err instanceof Error ? err.message : String(err) },
+        'LLM failed, used rule-based fallback',
+      ),
+  });
+  const { store, jobs } = createPersistence(config);
+  const scheduler = new JobScheduler(jobs, {
+    followUpDelaysMs: config.followUpDelaysMs,
+    quietHours: config.quietHours,
+    timeZone: config.timeZone,
+    pollMs: config.schedulerPollMs,
+    log: { warn: (o, m) => log.warn(o, m), error: (o, m) => log.error(o, m) },
+  });
+
   return {
-    store: createStore(config),
-    qualifier: createQualifier({ llm: new MockLlm() }), // TODO(Dev B, Phase 2): real LLM when LLM_PROVIDER!=mock
+    store,
+    qualifier: createQualifier({ llm }),
     channel: createChannel(env),
     crm,
-    scheduler: new NoopScheduler(), // TODO(Dev B, Phase 2): BullMQ scheduler
+    scheduler,
     bus,
+    useLogger: (l) => {
+      log = l;
+    },
   };
 }
 
 const REQUEST_ID = /^[\w.-]{1,64}$/;
 
-export async function buildServer(deps: Deps = buildDeps(), config: Config = loadConfig()) {
+export async function buildServer(
+  deps: AppDeps = buildDeps(),
+  config: Config = loadConfig(),
+  /** Test hook: a fake clock for timestamps / the WhatsApp 24h window. */
+  opts: { now?: () => Date } = {},
+) {
   const app = Fastify({
     logger:
       config.logLevel === 'silent'
@@ -69,6 +106,7 @@ export async function buildServer(deps: Deps = buildDeps(), config: Config = loa
       return typeof h === 'string' && REQUEST_ID.test(h) ? h : randomUUID();
     },
   });
+  deps.useLogger?.(app.log);
 
   registerErrorHandling(app);
   app.addHook('onRequest', async (req, reply) => {
@@ -86,7 +124,10 @@ export async function buildServer(deps: Deps = buildDeps(), config: Config = loa
       'request completed',
     );
   });
-  app.addHook('onClose', async () => deps.store.close());
+  app.addHook('onClose', async () => {
+    await deps.scheduler.stop();
+    await deps.store.close();
+  });
 
   await app.register(cors, {
     origin: config.corsOrigins,
@@ -96,10 +137,20 @@ export async function buildServer(deps: Deps = buildDeps(), config: Config = loa
     maxAge: 600,
   });
 
-  const leads = createLeadService(deps, app.log);
+  const leads = createLeadService(deps, app.log, {
+    defaultProjectId: config.defaultProjectId,
+    defaultCountryCode: config.defaultCountryCode,
+    now: opts.now,
+  });
+  deps.scheduler.setHandler((job) => leads.runJob(job));
 
   app.get('/health', async (req, reply) => {
-    const info = { store: deps.store.name, channel: deps.channel.name, crm: deps.crm.name };
+    const info = {
+      store: deps.store.name,
+      channel: deps.channel.name,
+      crm: deps.crm.name,
+      llm: deps.qualifier.llmName,
+    };
     try {
       await deps.store.ping();
     } catch (err) {
@@ -131,12 +182,61 @@ export async function buildServer(deps: Deps = buildDeps(), config: Config = loa
   route(app, 'requestHandoff', async ({ params }) => leads.handoff(params.id!));
   route(app, 'createViewing', async ({ body }) => leads.bookViewing(body));
   route(app, 'getFunnel', async () => funnel(await deps.store.listLeads({})));
+
+  await app.register(async (scope) => whatsappWebhook(scope, deps, config, leads));
+
+  return app;
+}
+
+/**
+ * WhatsApp Cloud API webhook, in its own scope so it can keep the raw body for signature checks.
+ * Always answers 200 once authenticated: Meta retries anything else, which would duplicate replies.
+ */
+function whatsappWebhook(
+  app: FastifyInstance,
+  deps: AppDeps,
+  config: Config,
+  leads: ReturnType<typeof createLeadService>,
+) {
+  app.removeContentTypeParser('application/json');
+  app.addContentTypeParser('application/json', { parseAs: 'string' }, (req, body, done) => {
+    (req as { rawBody?: string }).rawBody = body as string;
+    try {
+      done(null, body === '' ? {} : JSON.parse(body as string));
+    } catch (err) {
+      (err as { statusCode?: number }).statusCode = 400;
+      done(err as Error, undefined);
+    }
+  });
+
+  if (config.whatsappAppSecret) {
+    const secret = config.whatsappAppSecret;
+    app.addHook('preHandler', async (req, reply) => {
+      if (req.method !== 'POST') return;
+      const raw = (req as { rawBody?: string }).rawBody ?? '';
+      const sig = req.headers['x-hub-signature-256'];
+      if (!verifyWhatsAppSignature(raw, typeof sig === 'string' ? sig : undefined, secret)) {
+        req.log.warn('whatsapp webhook: bad signature');
+        return reply.status(401).send({ error: 'Invalid signature' });
+      }
+    });
+  }
+
   route(app, 'whatsappWebhook', async ({ body }) => {
-    // TODO(Dev B, Phase 2): map inbound phone -> lead/conversation and call leads.sendMessage
-    deps.channel.parseInbound(body);
+    for (const inbound of deps.channel.parseInbound(body)) {
+      try {
+        await leads.receiveWhatsApp(inbound);
+      } catch (err) {
+        app.log.error(
+          { err, providerMessageId: inbound.providerMessageId },
+          'whatsapp inbound failed',
+        );
+      }
+    }
     return { ok: true as const };
   });
-  // WhatsApp webhook verification handshake (Meta calls this once when the webhook is configured).
+
+  // Verification handshake (Meta calls this once when the webhook is configured).
   app.get('/webhooks/whatsapp', async (req, reply) => {
     const q = req.query as Record<string, string | undefined>;
     const token = config.whatsappVerifyToken;
@@ -150,6 +250,4 @@ export async function buildServer(deps: Deps = buildDeps(), config: Config = loa
     }
     return reply.status(403).send({ error: 'Webhook verification failed' });
   });
-
-  return app;
 }

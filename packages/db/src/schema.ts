@@ -135,3 +135,31 @@ export const viewings = pgTable(
   },
   (t) => [index('viewings_lead_idx').on(t.leadId)],
 );
+
+/**
+ * Scheduled work (follow-up sequence, outbound send retries). Postgres-backed queue instead of
+ * BullMQ/Redis so the free stack is just Supabase (ADR 0002). Workers claim rows with SKIP LOCKED.
+ */
+export const jobs = pgTable(
+  'jobs',
+  {
+    id: text('id').primaryKey(),
+    leadId: text('lead_id')
+      .notNull()
+      .references(() => leads.id),
+    kind: text('kind').notNull(),
+    /** pending | running | done | cancelled | failed */
+    status: text('status').notNull().default('pending'),
+    runAt: timestamp('run_at', { withTimezone: true }).notNull(),
+    attempts: integer('attempts').notNull().default(0),
+    payload: jsonb('payload').notNull(),
+    lastError: text('last_error'),
+    lockedAt: timestamp('locked_at', { withTimezone: true }),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [
+    index('jobs_due_idx').on(t.status, t.runAt),
+    index('jobs_lead_idx').on(t.leadId, t.status),
+  ],
+);

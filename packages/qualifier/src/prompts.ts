@@ -94,6 +94,10 @@ export const COPY = {
     en: 'Connecting you with a human advisor now. They will reply here shortly.',
     ar: 'نقوم الآن بتحويلك إلى مستشار. سيرد عليك هنا قريباً.',
   },
+  viewingRequested: {
+    en: 'Great! An advisor will message you here shortly to confirm a viewing time.',
+    ar: 'رائع! سيتواصل معك أحد مستشارينا هنا قريباً لتأكيد موعد المعاينة.',
+  },
   didntCatch: {
     en: 'Sorry, I did not catch that.',
     ar: 'عذراً، لم أفهم ذلك.',
@@ -114,3 +118,14 @@ export const BOOK_VIEWING_REPLIES: Record<Locale, QuickReply[]> = {
     { id: 'action:handoff', label: 'تحدث مع مستشار' },
   ],
 };
+
+/** System prompt for LLM slot extraction (OpenAiLlm). Output shape is enforced by a JSON schema. */
+export const SLOT_EXTRACTION_SYSTEM_PROMPT = `You extract structured facts from a property buyer's chat message for a real-estate sales assistant in Dubai.
+The message may be English, Arabic (any dialect, Arabic-Indic digits) or a mix.
+Return ONLY what the buyer actually states; use null for anything not stated. Never guess.
+- budgetMinAed / budgetMaxAed: integer AED. Convert words and units ("2.5m", "مليون ونص", "900k"). Convert USD at 3.6725.
+  One figure X: min = round(0.7 * X), max = X. "Up to X": min = 0, max = X. "X+" / "more than X": min = X, max = max(X, 20000000).
+  Ignore phone numbers, bedroom counts, floors, years and months.
+- timeline: now (ready now / this month), 0_3_months, 3_6_months, 6_12_months (this year / within a year), exploring (just looking / no rush).
+- unitType: studio, 1br, 2br, 3br, 4br, penthouse, townhouse.
+- purpose: investor (investment, rental yield, rent out) or end_user (to live in, family home).`;

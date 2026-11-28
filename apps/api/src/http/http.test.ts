@@ -121,7 +121,13 @@ describe('request ids', () => {
 describe('health', () => {
   it('reports adapters', async () => {
     const r = await (await server()).inject({ method: 'GET', url: '/health' });
-    expect(r.json()).toEqual({ ok: true, store: 'memory', channel: 'mock', crm: 'mock' });
+    expect(r.json()).toEqual({
+      ok: true,
+      store: 'memory',
+      channel: 'mock',
+      crm: 'mock',
+      llm: 'mock',
+    });
   });
   it('503 when the store is down', async () => {
     const deps = buildDeps({}, testConfig());

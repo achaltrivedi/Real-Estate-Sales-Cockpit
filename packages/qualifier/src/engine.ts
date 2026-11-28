@@ -24,6 +24,8 @@ export interface TurnResult {
   escalate: boolean;
   /** true → buyer asked to book a viewing. */
   wantsViewing: boolean;
+  /** true → the turn filled or changed at least one slot (or was an action). */
+  understood: boolean;
 }
 
 /** Buyer asks for a person. Runs on normalised text (see text.ts). */
@@ -92,6 +94,8 @@ export function openingReplies(locale: Locale): Reply[] {
 /** The conversation state machine: one buyer turn in, replies + updated qualification out. */
 export function createQualifier(deps: { llm: LlmProvider }) {
   return {
+    /** Which LLM backs free-text extraction (shown in /health). */
+    llmName: deps.llm.name,
     async handleTurn(input: {
       text: string;
       quickReplyId?: string;
@@ -106,10 +110,17 @@ export function createQualifier(deps: { llm: LlmProvider }) {
           replies: [{ text: COPY.handoff[locale] }],
           escalate: true,
           wantsViewing: false,
+          understood: true,
         };
       }
       if (quickReplyId === 'action:book_viewing') {
-        return { qualification: current, replies: [], escalate: false, wantsViewing: true };
+        return {
+          qualification: current,
+          replies: [],
+          escalate: false,
+          wantsViewing: true,
+          understood: true,
+        };
       }
 
       const extracted =
@@ -117,11 +128,11 @@ export function createQualifier(deps: { llm: LlmProvider }) {
       const learned = stripUndefined(extracted);
       const qualification = score({ ...toSlots(current), ...learned });
 
+      const understood = Object.keys(learned).length > 0;
       const replies: Reply[] = [];
       const next = nextQuestion(qualification.missing, locale);
       if (next) {
         // Nothing understood and nothing changed: say so instead of silently repeating the question.
-        const understood = Object.keys(learned).length > 0;
         replies.push(
           understood ? next : { ...next, text: `${COPY.didntCatch[locale]} ${next.text}` },
         );
@@ -129,7 +140,7 @@ export function createQualifier(deps: { llm: LlmProvider }) {
         replies.push({ text: COPY.qualified[locale], quickReplies: BOOK_VIEWING_REPLIES[locale] });
       }
 
-      return { qualification, replies, escalate: false, wantsViewing: false };
+      return { qualification, replies, escalate: false, wantsViewing: false, understood };
     },
   };
 }

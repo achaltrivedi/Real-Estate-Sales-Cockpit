@@ -1,30 +1,33 @@
+import type { OutboundMessage } from '@gsc/messaging';
+import type { JobHandler } from './job-scheduler';
+
 /**
- * Follow-up scheduler port. Phase 2 (Dev B): add a BullMQ implementation
- * (instant reply retry, reminder sequence, stop-on-reply, quiet hours) behind this interface.
+ * Follow-up scheduler port used by the lead service. Implemented by `JobScheduler`
+ * (Postgres or in-memory job store; replaces the BullMQ plan, see docs/adr/0002).
  */
 export interface FollowUpScheduler {
+  /** (Re)starts the reminder sequence for a lead, cancelling reminders still pending. */
   scheduleSequence(leadId: string): Promise<void>;
+  /** Stop-on-reply / handoff / opt-out: cancels pending reminders. */
   cancel(leadId: string): Promise<void>;
+  /** Queues a re-send of an outbound message that failed (instant-reply retry). */
+  retrySend(leadId: string, message: OutboundMessage): Promise<void>;
+  setHandler(handler: JobHandler): void;
+  start(): void;
+  stop(): Promise<void>;
 }
 
-/** No-op scheduler so the demo runs without Redis. */
+/** Does nothing: for tests that don't care about follow-ups. */
 export class NoopScheduler implements FollowUpScheduler {
-  readonly scheduled = new Set<string>();
-  async scheduleSequence(leadId: string) {
-    this.scheduled.add(leadId);
-  }
-  async cancel(leadId: string) {
-    this.scheduled.delete(leadId);
-  }
+  async scheduleSequence() {}
+  async cancel() {}
+  async retrySend() {}
+  setHandler() {}
+  start() {}
+  async stop() {}
 }
 
-/** Quiet hours, e.g. "22:00-08:00" in Asia/Dubai. */
-export function isQuietHour(now: Date, window = '22:00-08:00', timeZone = 'Asia/Dubai'): boolean {
-  const [start, end] = window.split('-').map((t) => {
-    const [h, m] = t.split(':').map(Number);
-    return (h ?? 0) * 60 + (m ?? 0);
-  }) as [number, number];
-  const parts = new Intl.DateTimeFormat('en-GB', { timeZone, hour: '2-digit', minute: '2-digit', hour12: false }).formatToParts(now);
-  const mins = Number(parts.find((p) => p.type === 'hour')?.value) * 60 + Number(parts.find((p) => p.type === 'minute')?.value);
-  return start > end ? mins >= start || mins < end : mins >= start && mins < end;
-}
+export { JobScheduler, type JobHandler, type SchedulerOptions } from './job-scheduler';
+export { MemoryJobStore, type Job, type JobStore, type JobPayload } from './jobs';
+export { PostgresJobStore } from './postgres-jobs';
+export { isQuietHour, nextAllowedTime, parseDurations, parseQuietHours } from './time';

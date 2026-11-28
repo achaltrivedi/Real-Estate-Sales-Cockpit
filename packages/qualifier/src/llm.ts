@@ -1,5 +1,6 @@
 import type { Locale, Purpose, Timeline, UnitType } from '@gsc/contracts';
 import { extractSlots } from './extract';
+import { OpenAiLlm } from './openai';
 
 /** Slots the qualifier tries to fill. */
 export interface Slots {
@@ -26,4 +27,25 @@ export class MockLlm implements LlmProvider {
   async extractSlots({ text }: { text: string; locale: Locale }): Promise<Slots> {
     return extractSlots(text);
   }
+}
+
+/**
+ * Picks the LLM from env. Mock is the default (offline demo, zero cost).
+ * LLM_PROVIDER=openai needs LLM_API_KEY; LLM_MODEL defaults to gpt-4o-mini.
+ */
+export function createLlm(
+  env: Record<string, string | undefined>,
+  opts: { onError?: (err: unknown) => void } = {},
+): LlmProvider {
+  const provider = env.LLM_PROVIDER?.trim() || 'mock';
+  if (provider === 'mock') return new MockLlm();
+  if (provider === 'openai') {
+    if (!env.LLM_API_KEY?.trim()) throw new Error('LLM_PROVIDER=openai needs LLM_API_KEY');
+    return new OpenAiLlm({
+      apiKey: env.LLM_API_KEY.trim(),
+      model: env.LLM_MODEL?.trim() || undefined,
+      onError: opts.onError,
+    });
+  }
+  throw new Error(`Unknown LLM_PROVIDER "${provider}" (use mock | openai)`);
 }

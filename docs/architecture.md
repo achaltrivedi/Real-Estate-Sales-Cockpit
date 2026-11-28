@@ -8,7 +8,7 @@
   │  features/explorer   ────────┼──────────►│  domain/lead-service (orchestration)    │
   │  features/calculator         │  typed    │  domain/routing, metrics, events        │
   │  features/chat-widget        │  client   │  store/  (Memory | Postgres)            │
-  │  features/marketing          │           │  scheduler/ (Noop | BullMQ)             │
+  │  features/marketing          │           │  scheduler/ (jobs: Memory | Postgres)   │
   │ packages/ui   packages/3d    │           │      │        │          │              │
   └──────────────────────────────┘           │ qualifier  messaging     crm     db     │
                                              │ (LLM port) (Channel port)(CRM port)     │
@@ -53,3 +53,11 @@
 - **Config**: env is validated once at startup (`apps/api/src/config.ts`); a bad value fails fast with a readable message.
 - **Stores**: `DATA_DRIVER=memory|postgres`. Both implementations pass the same contract suite (`apps/api/src/store/store.contract.ts`).
 - **Side integrations never lose a lead**: CRM sync is fire-and-forget and scheduler errors are logged, not thrown.
+
+## Conversation engine (Phase 2)
+
+- **Channels**: the widget (`POST /conversations/:id/messages`) and WhatsApp (`POST /webhooks/whatsapp`) run the same turn logic (`lead-service.processTurn`). WhatsApp: phone (E.164) → existing lead or a new `source: whatsapp` lead → qualifier → replies sent back through `MessagingChannel`. A buyer who first used the widget with a phone number continues the same conversation on WhatsApp.
+- **WhatsApp details**: duplicates (Meta re-deliveries) ignored; >3 quick replies become a list message; replies that fail to send are retried by the scheduler; `X-Hub-Signature-256` checked when `WHATSAPP_APP_SECRET` is set.
+- **LLM**: `LlmProvider` = `MockLlm` (rules, default) or `OpenAiLlm` (strict JSON schema). Quick replies never call the LLM; failures fall back to the rules.
+- **Follow-ups** (ADR 0002): `JobScheduler` over a `jobs` table (Postgres) or memory. Reminders 1h/24h/72h after the buyer's last message, cancelled by any reply, qualification, handoff or opt-out, deferred out of quiet hours. Inside WhatsApp's 24h window a reminder is free text with the next question's buttons; outside it an approved template (`follow_up_1..3`).
+- **Routing**: available → speaks the lead's language → handles the unit type → fewest active leads → id. Sticky once assigned; nobody available = unassigned (visible to the manager).

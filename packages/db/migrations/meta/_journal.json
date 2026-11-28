@@ -8,6 +8,13 @@
       "when": 1795849041176,
       "tag": "0000_init",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1795852789348,
+      "tag": "0001_scheduler_jobs",
+      "breakpoints": true
     }
   ]
 }
